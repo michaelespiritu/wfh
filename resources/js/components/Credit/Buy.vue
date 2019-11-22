@@ -51,7 +51,10 @@
 
 <script>
 import Card from '../Stripe/Card'
+import SwalAlerts from '../Misc/SwalAlerts'
+
 export default {
+    mixins: [SwalAlerts],
     components: {
         Card
     },
@@ -68,7 +71,15 @@ export default {
                credit: this.credit,
                token: value.token
             }).then(response => {
-                console.log(response)
+                this.successAlert(
+                    response.data.success, 
+                    'Congratulations',
+                    {
+                        onClose: () => {
+                            location.href = '/jobs/create'    
+                        }
+                    }
+                )
             }).catch(error => {
                 console.log(error)
             })

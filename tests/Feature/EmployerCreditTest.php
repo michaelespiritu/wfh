@@ -2,9 +2,10 @@
 
 namespace Tests\Feature;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
+use Cartalyst\Stripe\Laravel\Facades\Stripe;
+use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class EmployerCreditTest extends TestCase
 {
@@ -19,9 +20,9 @@ class EmployerCreditTest extends TestCase
 
         $user->employerCredit()->update(['credit' => 0]);
 
-        \Stripe\Stripe::setApiKey("sk_test_BQokikJOvBiI2HlWgH4olfQ2");
+        Stripe::setApiKey("sk_test_BQokikJOvBiI2HlWgH4olfQ2");
 
-        $token = \Stripe\Token::create(array(
+        $token = Stripe::tokens()->create(array(
             "card" => array(
                 "number" => "4242424242424242",
                 "exp_month" => 1,
@@ -29,10 +30,10 @@ class EmployerCreditTest extends TestCase
                 "cvc" => "314"
             )
         ));
-
+        
         $this->post('/credit/buy-credit', [
             'credit' => 2,
-            'token' => $token->id
+            'token' => $token
         ]);
 
         $this->assertDatabaseHas('employer_credits', [

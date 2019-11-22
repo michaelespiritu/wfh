@@ -8,7 +8,20 @@
       @change='complete = $event.complete'
     />
     
-    <button class='my-4 btn btn-primary btn-block' @click='pay' :disabled='!complete'>Pay with credit card</button>
+    <div>
+
+          <button 
+            class='my-4 btn btn-primary btn-block' 
+            @click='pay' 
+            v-if="!loading"
+            :disabled='!complete'>
+              Pay with credit card
+          </button>
+
+          <div class="progress my-4" v-if="loading">
+              <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+          </div>
+      </div>
   </div>
 </template>
  
@@ -21,6 +34,7 @@ export default {
       rememberCard: false,
       editCard: false,
       complete: false,
+      loading: false,
       stripeOptions: {
           style:{
               base: {
@@ -47,6 +61,7 @@ export default {
  
   methods: {
     pay () {
+      this.loading = true
       // createToken returns a Promise which resolves in a result object with
       // either a token or an error key.
       // See https://stripe.com/docs/api#tokens for the token object.
