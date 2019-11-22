@@ -1,0 +1,109 @@
+// Global component styles
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  height: 100%;
+}
+
+a {
+  &:focus {
+    outline: none;
+  }
+}
+
+// Main page wrapper
+#wrapper {
+  display: flex;
+  #content-wrapper {
+    background-color: $gray-100;
+    width: 100%;
+    overflow-x: hidden;
+    #content {
+      flex: 1 0 auto;
+    }
+  }
+}
+
+// Set container padding to match gutter width instead of default 15px
+.container,
+.container-fluid {
+  padding-left: $grid-gutter-width;
+  padding-right: $grid-gutter-width;
+}
+
+// Scroll to top button
+.scroll-to-top {
+  position: fixed;
+  right: 1rem;
+  bottom: 1rem;
+  display: none;
+  width: 2.75rem;
+  height: 2.75rem;
+  text-align: center;
+  color: $white;
+  background: fade-out($gray-800, .5);
+  line-height: 46px;
+  &:focus,
+  &:hover {
+    color: white;
+  }
+  &:hover {
+    background: $gray-800;
+  }
+  i {
+    font-weight: 800;
+  }
+}
+
+.cursor-pointer{
+  cursor: pointer;
+}
+
+.description-data {
+  height: 20vw;
+  overflow: hidden;
+  transition: .2s all ease-in-out;
+}
+
+.badge-Reject {
+  color: #fff;
+  background-color: #e74a3b;
+}
+
+.border-left-Reject {
+  border-left: 0.25rem solid #e74a3b !important;
+}
+
+.text-Reject {
+  color: #e74a3b !important;
+}
+
+.badge-Shortlist {
+  color: #fff;
+  background-color: #1cc88a;
+}
+
+.text-Shortlist {
+  color: #1cc88a !important;
+}
+
+.border-left-Shortlist {
+  border-left: 0.25rem solid #1cc88a !important;
+}
+
+.badge-Waiting {
+  color: #fff;
+  background-color: #4e73df;
+}
+
+.border-left-Waiting {
+  border-left: 0.25rem solid #4e73df !important;
+}
+
+.text-Waiting {
+  color: #4e73df !important;
+}
