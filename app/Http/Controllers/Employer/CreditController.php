@@ -5,11 +5,11 @@ namespace App\Http\Controllers\Employer;
 use App\Traits\CreditsTrait;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Cartalyst\Stripe\Laravel\Facades\Stripe;
+use App\Traits\PaymentsTrait;
 
 class CreditController extends Controller
 {
-    use CreditsTrait;
+    use CreditsTrait, PaymentsTrait;
 
     /**
      * Display a listing of the resource.
@@ -28,9 +28,7 @@ class CreditController extends Controller
      */
     public function create()
     {
-        return view('credit.create', [
-            'intent' => auth()->user()->createSetupIntent()
-        ]);
+        return view('credit.create');
     }
 
     /**
@@ -41,26 +39,15 @@ class CreditController extends Controller
      */
     public function store()
     {
-        if (!auth()->user()->stripe_id) {
-           $create = Stripe::customers()->create(
-                [
-                    'name' => auth()->user()->name,
-                    'email' => auth()->user()->email
-                ]
-            );
+        $amount = request()->credit * 5;
 
-            auth()->user()->update(['stripe_id' => $create['id']]);
-            Stripe::cards()->create($create['id'], request()->token['id']);
-        }
-
-
-        $charge = Stripe::charges()->create([
-            'customer' => auth()->user()->stripe_id,
-            'currency' => 'USD',
-            'amount'   => 50.49,
-        ]);
+        $this->createPayment(auth()->user(), $amount);
 
         $this->buyCredits(auth()->user(), request()->all());
+
+        return response()->json([
+            'success' => 'Your card has been charged and Your Credit has been Adjusted.'
+        ]);
     }
 
     /**
