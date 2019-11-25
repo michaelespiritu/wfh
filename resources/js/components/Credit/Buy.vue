@@ -66,10 +66,10 @@ export default {
     },
     methods: {
         buy (value, rememberCard, editCard) {
-            console.log(value)
             axios.post(`/credit/buy-credit`, {
-               credit: this.credit,
-               token: value.token
+                editCard: editCard,
+                credit: this.credit,
+                token: value.token
             }).then(response => {
                 this.successAlert(
                     response.data.success, 
@@ -81,7 +81,10 @@ export default {
                     }
                 )
             }).catch(error => {
-                console.log(error)
+                console.log(error.response.data.message)
+                this.errorAlert(
+                    error.response.data.message, 
+                )
             })
         }
     }

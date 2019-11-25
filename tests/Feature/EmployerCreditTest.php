@@ -31,7 +31,7 @@ class EmployerCreditTest extends TestCase
             )
         ));
         
-        $this->post('/credit/buy-credit', [
+        $buy = $this->post('/credit/buy-credit', [
             'credit' => 2,
             'token' => $token
         ]);
@@ -42,5 +42,32 @@ class EmployerCreditTest extends TestCase
         ]);
 
         $this->assertEquals($user->employerCredit->credit, 2);
+    }
+
+
+    /** @test */
+    public function EmployerCanSeeErrorInPaymentDetails()
+    {
+        $user = $this->signInEmployer();
+
+        $user->employerCredit()->update(['credit' => 0]);
+
+        Stripe::setApiKey("sk_test_BQokikJOvBiI2HlWgH4olfQ2");
+
+        $token = Stripe::tokens()->create(array(
+            "card" => array(
+                "number" => "4000000000000341",
+                "exp_month" => 1,
+                "exp_year" => 2020,
+                "cvc" => "314"
+            )
+        ));
+        
+        $buy = $this->post('/credit/buy-credit', [
+            'credit' => 2,
+            'token' => $token
+        ]);
+
+        $buy->assertStatus(500);
     }
 }

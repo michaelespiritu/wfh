@@ -6,6 +6,7 @@ use App\Traits\CreditsTrait;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Traits\PaymentsTrait;
+use Exception;
 
 class CreditController extends Controller
 {
@@ -41,7 +42,13 @@ class CreditController extends Controller
     {
         $amount = request()->credit * 5;
 
-        $this->createPayment(auth()->user(), $amount);
+        $payment = $this->createPayment(auth()->user(), $amount);
+
+        if (!$payment['pass']) {
+            return response()->json([
+                'message' => $payment['message']
+            ], 500);
+        }
 
         $this->buyCredits(auth()->user(), request()->all());
 
