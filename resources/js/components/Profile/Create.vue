@@ -66,14 +66,15 @@ export default {
     },
     methods: {
         create () {
+            this.loading = true
             this.validateBeforeSubmit(
                 `/dashboard/profile`,
                 {
                     name: this.$store.state.Profile.Name,
                     title: this.$store.state.Profile.Title,
                 }
-
             )
+            this.loading = false
         }
     }
 }

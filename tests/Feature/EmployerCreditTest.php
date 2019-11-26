@@ -32,6 +32,7 @@ class EmployerCreditTest extends TestCase
         ));
         
         $buy = $this->post('/credit/buy-credit', [
+            'editCard' => false,
             'credit' => 2,
             'token' => $token
         ]);
@@ -39,6 +40,11 @@ class EmployerCreditTest extends TestCase
         $this->assertDatabaseHas('employer_credits', [
             'user_id' => $user->id,
             'credit' => 2
+        ]);
+
+        $this->assertDatabaseHas('users', [
+            'card_last_four' => '4242',
+            'card_brand' => 'Visa'
         ]);
 
         $this->assertEquals($user->employerCredit->credit, 2);
@@ -64,10 +70,12 @@ class EmployerCreditTest extends TestCase
         ));
         
         $buy = $this->post('/credit/buy-credit', [
+            'editCard' => false,
             'credit' => 2,
             'token' => $token
         ]);
 
         $buy->assertStatus(500);
     }
+
 }

@@ -3,6 +3,7 @@ const getDefaultState = () => {
       Identifier: null,
       Name: null,
       Title: null,
+      HasCard: false,
       Applicant: {
         Skills: [],
         CoverLetter: null,
@@ -31,6 +32,9 @@ const getDefaultState = () => {
   const mutations = {
         SET_IDENTIFIER(state, data) {
             state.Identifier = data;
+        },
+        SET_HAS_CARD(state, data) {
+            state.HasCard = data;
         },
         SET_NAME(state, data) {
             state.Name = data;

@@ -19,7 +19,7 @@ class User extends Authenticatable implements MustVerifyEmail
 {
     use Notifiable;
 
-    protected $appends = ['name', 'title', 'meta', 'skills_bank'];
+    protected $appends = ['name', 'title', 'meta', 'skills_bank', 'has_card'];
 
     /**
      * The attributes that are mass assignable.
@@ -27,7 +27,7 @@ class User extends Authenticatable implements MustVerifyEmail
      * @var array
      */
     protected $fillable = [
-        'identifier', 'email', 'password', 'role_id', 'stripe_id'
+        'identifier', 'email', 'password', 'role_id', 'stripe_id', 'card_last_four', 'card_brand'
     ];
 
     /**
@@ -46,7 +46,7 @@ class User extends Authenticatable implements MustVerifyEmail
      * @var array
      */
     protected $hidden = [
-        'password', 'remember_token',
+        'password', 'remember_token', 'stripe_id', 'card_last_four', 'card_brand', 'email_verified_at', 'trial_ends_at', 'updated_at'
     ];
 
     /**
@@ -188,6 +188,16 @@ class User extends Authenticatable implements MustVerifyEmail
     public function getTitleAttribute()
     {
         return ($this->profile) ? $this->profile->title : null;
+    }
+
+    /**
+     * Output the Skills of user if Profile is Found to be append in User Object
+     * 
+     * @return string
+     */
+    public function getHasCardAttribute()
+    {
+        return ($this->card_last_four) ? true : false;
     }
 
     /**

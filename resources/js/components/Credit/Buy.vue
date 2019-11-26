@@ -69,15 +69,15 @@ export default {
             axios.post(`/credit/buy-credit`, {
                 editCard: editCard,
                 credit: this.credit,
-                token: value.token
+                token: (value) && value.token
             }).then(response => {
                 this.successAlert(
                     response.data.success, 
                     'Congratulations',
                     {
-                        onClose: () => {
-                            location.href = '/jobs/create'    
-                        }
+                        // onClose: () => {
+                        //     location.href = '/jobs/create'    
+                        // }
                     }
                 )
             }).catch(error => {

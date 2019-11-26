@@ -1,26 +1,59 @@
 <template>
   <div>
-    <p class="h3">Please give us your payment details:</p>
-    <card class='stripe-card'
-      :class='{ complete }'
-      stripe='pk_test_BQ7UO1EwyyVJCSUFCjdsSMzT00xLN0wFrE'
-      :options='stripeOptions'
-      @change='complete = $event.complete'
-    />
     
-    <div>
+    <div v-if="!$store.state.Profile.HasCard">
+      <p class="h3">Please give us your payment details:</p>
 
-          <button 
-            class='my-4 btn btn-primary btn-block' 
-            @click='pay' 
-            v-if="!loading"
-            :disabled='!complete'>
-              Pay with credit card
-          </button>
+      <card class='stripe-card'
+        :class='{ complete }'
+        stripe='pk_test_BQ7UO1EwyyVJCSUFCjdsSMzT00xLN0wFrE'
+        :options='stripeOptions'
+        @change='complete = $event.complete'
+      />
+    
+    
+      <div>
 
-          <div class="progress my-4" v-if="loading">
-              <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+            <button 
+              class='my-4 btn btn-primary btn-block' 
+              @click='pay' 
+              v-if="!loading"
+              :disabled='!complete'>
+                Pay with credit card
+            </button>
+
+            <div class="progress my-4" v-if="loading">
+                <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+            </div>
+        </div>
+
+      </div>
+
+      <div v-else>
+
+          <div>
+
+              <button 
+                class='my-4 btn btn-primary btn-block' 
+                @click="$emit('proceed', null, rememberCard, editCard)"
+                v-if="!loading">
+                  Pay with credit card
+              </button>
+
+              <p class="text-center">
+                <small>If you wish to edit your Credit Card information. 
+                  <br>
+                  <span 
+                    @click="$store.commit('SET_HAS_CARD', false)"
+                    class="cursor-pointer">Click here.</span>
+                </small>
+              </p>
+
+              <div class="progress my-4" v-if="loading">
+                  <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+              </div>
           </div>
+
       </div>
   </div>
 </template>
@@ -59,9 +92,26 @@ export default {
  
   components: { Card },
  
+  computed: {
+    hasCard () {
+      return this.$store.state.Profile.HasCard
+    }
+  },
+
+  watch: {
+    hasCard (value) {
+      if (value) {
+        this.editCard = false
+      }
+      if (!value) {
+        this.editCard = true
+      }
+    }
+  },
+
   methods: {
     pay () {
-      this.loading = true
+      // this.loading = true
       // createToken returns a Promise which resolves in a result object with
       // either a token or an error key.
       // See https://stripe.com/docs/api#tokens for the token object.

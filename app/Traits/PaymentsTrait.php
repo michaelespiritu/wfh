@@ -2,6 +2,7 @@
 
 namespace App\Traits;
 
+use Illuminate\Support\Arr;
 use Cartalyst\Stripe\Laravel\Facades\Stripe;
 
 trait PaymentsTrait
@@ -26,13 +27,37 @@ trait PaymentsTrait
     }
 
     /**
+     * Create the User in Stripe and Save details in Database
+     *
+     * @return object
+     */
+    public function updateCustomerInStripe($user, $data)
+    {
+        return Stripe::customers()->update($user->user_id, $data);
+    }
+
+    /**
      * Create the Card of User in Stripe to be used for purchase
      *
      * @return bool
      */
     public function createCardForUser($user, $token)
     {
-        return Stripe::cards()->create($user, $token);
+        $card = Stripe::cards()->create($user->stripe_id, $token);
+
+        $this->updateCustomerInStripe(
+            $user, 
+            [
+                'default_source' => $card['id'],
+            ]
+        );
+        
+        $user->update([
+            'card_last_four' => $card['last4'], 
+            'card_brand' => $card['brand']
+        ]);
+
+        return;
     }
 
     /**
@@ -42,29 +67,30 @@ trait PaymentsTrait
      */
     public function determineIfhasACard($user, $token)
     {
-        $card = Stripe::cards()->all($user);
+        $card = Stripe::cards()->all($user->stripe_id);
 
         if (!$card['data'])
-            $this->createCardForUser($user, $token);
-
+            $card = $this->createCardForUser($user, $token);
     }
 
     /**
      * Screening before charging the User in Stripe
      *
-     * @return bool
      */
-    public function createPaymentScreen ($user, $token)
+    public function createPaymentScreen ($user, $token, $editCard)
     {
         if (!$user->stripe_id) {
             $this->createCustomerInStripe($user);
 
-            $this->createCardForUser($user->stripe_id, $token);
+            $this->createCardForUser($user, $token);
 
             return;
         }
 
-        return $this->determineIfhasACard($user->stripe_id, $token);
+        $this->determineIfhasACard($user, $token);
+
+        if ($editCard)
+            $this->createCardForUser($user, $token);
     }
 
     /**
@@ -79,7 +105,7 @@ trait PaymentsTrait
             'message' => 'Something went wrong.'
         ];
 
-        $this->createPaymentScreen($user, request()->token['id']);
+        $this->createPaymentScreen($user, request()->token['id'], request()->editCard);
         
         try {
             $charge = Stripe::charges()->create([
@@ -126,7 +152,7 @@ trait PaymentsTrait
             // Something else happened, completely unrelated to Stripe
             $pass = [
                 'pass' => false,
-                'message' => $e->getMessage()
+                'message' => 'Something went wrong.'
             ];
         }
         

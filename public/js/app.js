@@ -1911,12 +1911,11 @@ __webpack_require__.r(__webpack_exports__);
       axios.post("/credit/buy-credit", {
         editCard: editCard,
         credit: this.credit,
-        token: value.token
+        token: value && value.token
       }).then(function (response) {
-        _this.successAlert(response.data.success, 'Congratulations', {
-          onClose: function onClose() {
-            location.href = '/jobs/create';
-          }
+        _this.successAlert(response.data.success, 'Congratulations', {// onClose: () => {
+          //     location.href = '/jobs/create'    
+          // }
         });
       })["catch"](function (error) {
         console.log(error.response.data.message);
@@ -3548,10 +3547,12 @@ var customMessages = {
   },
   methods: {
     create: function create() {
+      this.loading = true;
       this.validateBeforeSubmit("/dashboard/profile", {
         name: this.$store.state.Profile.Name,
         title: this.$store.state.Profile.Title
       });
+      this.loading = false;
     }
   }
 });
@@ -3930,6 +3931,39 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -3962,16 +3996,32 @@ __webpack_require__.r(__webpack_exports__);
   components: {
     Card: vue_stripe_elements_plus__WEBPACK_IMPORTED_MODULE_0__["Card"]
   },
+  computed: {
+    hasCard: function hasCard() {
+      return this.$store.state.Profile.HasCard;
+    }
+  },
+  watch: {
+    hasCard: function hasCard(value) {
+      if (value) {
+        this.editCard = false;
+      }
+
+      if (!value) {
+        this.editCard = true;
+      }
+    }
+  },
   methods: {
     pay: function pay() {
       var _this = this;
 
-      this.loading = true; // createToken returns a Promise which resolves in a result object with
+      // this.loading = true
+      // createToken returns a Promise which resolves in a result object with
       // either a token or an error key.
       // See https://stripe.com/docs/api#tokens for the token object.
       // See https://stripe.com/docs/api#errors for the error object.
       // More general https://stripe.com/docs/stripe.js#stripe-create-token.
-
       Object(vue_stripe_elements_plus__WEBPACK_IMPORTED_MODULE_0__["createToken"])().then(function (data) {
         return _this.$emit('proceed', data, _this.rememberCard, _this.editCard);
       });
@@ -4004,6 +4054,7 @@ __webpack_require__.r(__webpack_exports__);
   created: function created() {
     this.$store.commit('SET_NAME', this.user.name);
     this.$store.commit('SET_IDENTIFIER', this.user.identifier);
+    this.$store.commit('SET_HAS_CARD', this.user.has_card);
     this.$store.commit('SET_TITLE', this.user.profile ? this.user.profile.title : null);
     this.$store.commit('SET_SKILLS', this.user.skills_bank);
     var that = this;
@@ -61327,59 +61378,127 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c(
-    "div",
-    [
-      _c("p", { staticClass: "h3" }, [
-        _vm._v("Please give us your payment details:")
-      ]),
-      _vm._v(" "),
-      _c("card", {
-        staticClass: "stripe-card",
-        class: { complete: _vm.complete },
-        attrs: {
-          stripe: "pk_test_BQ7UO1EwyyVJCSUFCjdsSMzT00xLN0wFrE",
-          options: _vm.stripeOptions
-        },
-        on: {
-          change: function($event) {
-            _vm.complete = $event.complete
-          }
-        }
-      }),
-      _vm._v(" "),
-      _c("div", [
-        !_vm.loading
-          ? _c(
-              "button",
-              {
-                staticClass: "my-4 btn btn-primary btn-block",
-                attrs: { disabled: !_vm.complete },
-                on: { click: _vm.pay }
+  return _c("div", [
+    !_vm.$store.state.Profile.HasCard
+      ? _c(
+          "div",
+          [
+            _c("p", { staticClass: "h3" }, [
+              _vm._v("Please give us your payment details:")
+            ]),
+            _vm._v(" "),
+            _c("card", {
+              staticClass: "stripe-card",
+              class: { complete: _vm.complete },
+              attrs: {
+                stripe: "pk_test_BQ7UO1EwyyVJCSUFCjdsSMzT00xLN0wFrE",
+                options: _vm.stripeOptions
               },
-              [_vm._v("\n            Pay with credit card\n        ")]
-            )
-          : _vm._e(),
-        _vm._v(" "),
-        _vm.loading
-          ? _c("div", { staticClass: "progress my-4" }, [
-              _c("div", {
-                staticClass:
-                  "progress-bar progress-bar-striped progress-bar-animated",
-                staticStyle: { width: "100%" },
-                attrs: {
-                  role: "progressbar",
-                  "aria-valuenow": "100",
-                  "aria-valuemin": "0",
-                  "aria-valuemax": "100"
+              on: {
+                change: function($event) {
+                  _vm.complete = $event.complete
                 }
-              })
+              }
+            }),
+            _vm._v(" "),
+            _c("div", [
+              !_vm.loading
+                ? _c(
+                    "button",
+                    {
+                      staticClass: "my-4 btn btn-primary btn-block",
+                      attrs: { disabled: !_vm.complete },
+                      on: { click: _vm.pay }
+                    },
+                    [_vm._v("\n              Pay with credit card\n          ")]
+                  )
+                : _vm._e(),
+              _vm._v(" "),
+              _vm.loading
+                ? _c("div", { staticClass: "progress my-4" }, [
+                    _c("div", {
+                      staticClass:
+                        "progress-bar progress-bar-striped progress-bar-animated",
+                      staticStyle: { width: "100%" },
+                      attrs: {
+                        role: "progressbar",
+                        "aria-valuenow": "100",
+                        "aria-valuemin": "0",
+                        "aria-valuemax": "100"
+                      }
+                    })
+                  ])
+                : _vm._e()
             ])
-          : _vm._e()
-      ])
-    ],
-    1
-  )
+          ],
+          1
+        )
+      : _c("div", [
+          _c("div", [
+            !_vm.loading
+              ? _c(
+                  "button",
+                  {
+                    staticClass: "my-4 btn btn-primary btn-block",
+                    on: {
+                      click: function($event) {
+                        return _vm.$emit(
+                          "proceed",
+                          null,
+                          _vm.rememberCard,
+                          _vm.editCard
+                        )
+                      }
+                    }
+                  },
+                  [
+                    _vm._v(
+                      "\n                Pay with credit card\n            "
+                    )
+                  ]
+                )
+              : _vm._e(),
+            _vm._v(" "),
+            _c("p", { staticClass: "text-center" }, [
+              _c("small", [
+                _vm._v(
+                  "If you wish to edit your Credit Card information. \n                "
+                ),
+                _c("br"),
+                _vm._v(" "),
+                _c(
+                  "span",
+                  {
+                    staticClass: "cursor-pointer",
+                    on: {
+                      click: function($event) {
+                        return _vm.$store.commit("SET_HAS_CARD", false)
+                      }
+                    }
+                  },
+                  [_vm._v("Click here.")]
+                )
+              ])
+            ]),
+            _vm._v(" "),
+            _vm.loading
+              ? _c("div", { staticClass: "progress my-4" }, [
+                  _c("div", {
+                    staticClass:
+                      "progress-bar progress-bar-striped progress-bar-animated",
+                    staticStyle: { width: "100%" },
+                    attrs: {
+                      role: "progressbar",
+                      "aria-valuenow": "100",
+                      "aria-valuemin": "0",
+                      "aria-valuemax": "100"
+                    }
+                  })
+                ])
+              : _vm._e()
+          ])
+        ])
+  ])
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -79666,6 +79785,7 @@ var getDefaultState = function getDefaultState() {
     Identifier: null,
     Name: null,
     Title: null,
+    HasCard: false,
     Applicant: {
       Skills: [],
       CoverLetter: null
@@ -79694,6 +79814,9 @@ var actions = {
 var mutations = {
   SET_IDENTIFIER: function SET_IDENTIFIER(state, data) {
     state.Identifier = data;
+  },
+  SET_HAS_CARD: function SET_HAS_CARD(state, data) {
+    state.HasCard = data;
   },
   SET_NAME: function SET_NAME(state, data) {
     state.Name = data;
