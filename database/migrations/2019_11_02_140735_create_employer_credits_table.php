@@ -16,7 +16,7 @@ class CreateEmployerCreditsTable extends Migration
         Schema::create('employer_credits', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('user_id');
-            $table->integer('credit');
+            $table->integer('credit')->unsigned();
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');

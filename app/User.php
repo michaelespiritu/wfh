@@ -85,7 +85,7 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     public function minusEmployerCredit()
     {
-        return $this->employerCredit->credit - 1;
+        return (!empty((int) $this->employerCredit->credit)) ? $this->employerCredit->credit - 1 : 0;
     }
 
     /**

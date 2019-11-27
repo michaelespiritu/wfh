@@ -5,14 +5,14 @@
                 <div class="d-sm-flex justify-content-between align-content-between">
                     <h1 class="h3 mb-0 text-gray-800">Skills Bank</h1>
                     
-                    <button @click="create" class="w-full d-sm-inline-block btn btn-sm btn-primary shadow-sm">Save Changes</button>
+                    <button @click="validateBeforeSubmit" class="w-full d-sm-inline-block btn btn-sm btn-primary shadow-sm">Save Changes</button>
                 </div>
             </div>
             <div class="card-body">
                <div class="form-group row">
                     <label for="skills" class="col-sm-12 col-form-label">Skills</label>
                     <div class="col-sm-12">
-                    <button type="button" class="btn btn-outline-primary" @click="addSkill" >Add Skill</button>
+                    <button type="button" class="btn btn-outline-primary" @click="addSkill(null, null)" >Add Skill</button>
                     <div v-if="$store.state.Profile.Applicant.Skills.length != 0">
                         <div 
                             class="row"
@@ -22,7 +22,7 @@
                                 <label class="col-form-label">Skills Name</label>
                                 <div class="input-group mb-2" >
                                     <div class="input-group-prepend">
-                                        <div class="input-group-text" @click="addSkill"><i class="fa fa-plus"></i></div>
+                                        <div class="input-group-text" @click="addSkill(`skills-${index}`, `skills-${index + 1}`)"><i class="fa fa-plus"></i></div>
                                     </div>
 
                                     <input 
@@ -30,11 +30,11 @@
                                         v-validate="'required'" 
                                         data-vv-as="Skill Name" 
                                         class="form-control" 
-                                        id="skills" 
+                                        :id="`skills-${index}`" 
                                         :name="`skill_name_${index}`" 
                                         v-model="skill.name"
                                         placeholder="Skills"
-                                        @keyup.enter="addSkill">
+                                        @keyup.enter="addSkill(`skills-${index}`, `skills-${index + 1}`)">
 
                                     <div class="input-group-prepend">
                                         <div class="input-group-text" @click="deleteSkill(index)"><i class="fa fa-minus"></i></div>
@@ -77,23 +77,71 @@
 </template>
 
 <script>
-import Validate from '../../../Misc/Validate'
+import SwalAlerts from '../../../Misc/SwalAlerts'
 
 export default {
-    mixins: [Validate],
+    mixins: [SwalAlerts],
     methods: {
-        addSkill (){
+        addSkill (prev, next){
             this.$store.commit('PUSH_SKILL', {
                     name: '',
                     level: 1
             })
+            setTimeout(function () {
+                prev && document.getElementById(`${prev}`).blur()
+                prev && document.getElementById(`${next}`).focus()
+            }, 100)
         },
         deleteSkill (index) {
             this.$store.commit('REMOVE_SKILL')
         },
+        validateBeforeSubmit () {
+            this.loading = true
+
+            this.$validator.validateAll().then((result) => {
+                if(!result){
+                    this.errorAlert(
+                        'Some required fields are missing', 
+                        'Oopps',
+                        {
+                            onClose: () => {
+                                this.loading = false
+                            }
+                        }
+                    )
+                    
+                    return
+                }
+
+                this.create()
+            }).catch((e) => {
+                console.log(e)
+            });
+        },
         create () {
-            this.validateBeforeSubmit('skills', {
+            axios.post(`/dashboard/skills`, {
                 skills: this.$store.state.Profile.Applicant.Skills
+            })
+            .then(response => {
+
+                this.successAlert(
+                    response.data.success, 
+                    null,
+                    {
+                        toast: true,
+                        position: 'top-end',
+                        showConfirmButton: false,
+                        timer: 1500,
+                        onClose: () => {
+                            this.loading = false
+                        }
+                    }
+                )
+                
+            }).catch(err => {
+                this.errorAlert(
+                    `Something went wrong. <br> ${ err.response.data.hasOwnProperty('message') ? '<span class="text-danger">Tip</span>: ' + err.response.data.message : ''}`, 
+                )
             })
         }
     }

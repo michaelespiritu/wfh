@@ -14,7 +14,7 @@
         <div class="form-group row my-4">
             <label for="title" class="col-sm-12 col-form-label">Title</label>
             <div class="col-sm-12">
-            <input type="text" v-model="title" v-validate="'required|min:5'" class="form-control" id="title" name="title" placeholder="Title">
+            <input type="text" v-model="title" v-validate="'required|min:2'" class="form-control" id="title" name="title" placeholder="Title">
             <p v-if="errors.first('title')"><span class="help-block text-danger" >{{errors.first('title')}}</span></p>
             </div>
 
@@ -259,14 +259,39 @@ export default {
                 },
                 description: this.description
             }).then(response => {
+
+                if ( response.data.success == 'You Dont have enough Job Credit.') {
+                    this.$swal({
+                        type: 'error',
+                        title: 'Oh oh!',
+                        html: `${response.data.success}<br>This Job post is saved, but not yet published. <br> Purchase Job Credit to publish this.`,
+                        showConfirmButton: true,
+                        confirmButtonText: `Buy Job Credit Now.`,
+                        showCancelButton: true,
+                        cancelButtonText: 'Cancel',
+                        allowOutsideClick: false,
+                        allowEscapeKey: false,
+                    }).then((result) => {
+                        if (result.value) {
+                            document.cookie = `__wfh_job_target=${response.data.job.identifier}; path=/`
+                            location.href = `/credit/buy-credit`
+                        } else {
+                            location.href = `/jobs/${response.data.job.identifier}`
+                        }
+                    })
+
+                    return 
+                }
+
                 this.successAlert(response.data.success, 'Congratulations!', {onClose: () => {
                         location.href = `/jobs/${response.data.job.identifier}`
                     }})
             }).catch(err => {
+                
                 this.errorAlert(
-                        `Something went wrong. Please Try again. <br> ${ err.response.data.hasOwnProperty('error') ? '<span class="text-danger">Tip</span>: ' + err.response.data.error : ''}`,
-                        `Oopps!`
-                    )
+                    `Something went wrong. Please Try again. <br> ${ err.response.data.hasOwnProperty('message') ? '<span class="text-danger">Tip</span>: ' + err.response.data.message : ''}`,
+                    `Oopps!`
+                )
             })
         }
     }

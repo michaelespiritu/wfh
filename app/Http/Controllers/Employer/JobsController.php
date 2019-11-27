@@ -45,13 +45,17 @@ class JobsController extends Controller
      */
     public function store(JobValidator $request)
     {
-        if (!$this->checkIfCreditIsNotZero()) {
-            return response()->json([
-                'error' => 'You Dont have enough Job Credit.'
-            ], 403);
-        }
-
         $job = $this->createJob(auth()->user(), $request->all());
+
+        if (!$this->checkIfCreditIsNotZero()) {
+
+            $job->update(['expiration' => null]);
+
+            return response()->json([
+                'success' => 'You Dont have enough Job Credit.',
+                'job' => $job
+            ], 201);
+        }
 
         return response()->json([
             'success' => 'Job Post has been created.',

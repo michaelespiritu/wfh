@@ -2,15 +2,17 @@
 
 namespace App\Http\Controllers\Employer;
 
+use Exception;
+use App\Model\Job;
+use App\Traits\JobsTrait;
 use App\Traits\CreditsTrait;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 use App\Traits\PaymentsTrait;
-use Exception;
+use App\Http\Controllers\Controller;
 
 class CreditController extends Controller
 {
-    use CreditsTrait, PaymentsTrait;
+    use CreditsTrait, PaymentsTrait, JobsTrait;
 
     /**
      * Display a listing of the resource.
@@ -51,6 +53,8 @@ class CreditController extends Controller
         }
 
         $this->buyCredits(auth()->user(), request()->all());
+
+        $this->checkForTargetToBeUpdate(request()->target, auth()->user()->fresh());
 
         return response()->json([
             'success' => 'Your card has been charged and Your Credit has been Adjusted.'

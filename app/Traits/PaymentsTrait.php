@@ -2,7 +2,6 @@
 
 namespace App\Traits;
 
-use Illuminate\Support\Arr;
 use Cartalyst\Stripe\Laravel\Facades\Stripe;
 
 trait PaymentsTrait
@@ -31,9 +30,11 @@ trait PaymentsTrait
      *
      * @return object
      */
-    public function updateCustomerInStripe($user, $data)
+    public function updateCustomerInStripe($user, $data = [])
     {
-        return Stripe::customers()->update($user->user_id, $data);
+        Stripe::customers()->update($user->stripe_id, $data);
+
+        return;
     }
 
     /**
@@ -51,7 +52,7 @@ trait PaymentsTrait
                 'default_source' => $card['id'],
             ]
         );
-        
+       
         $user->update([
             'card_last_four' => $card['last4'], 
             'card_brand' => $card['brand']
@@ -71,6 +72,8 @@ trait PaymentsTrait
 
         if (!$card['data'])
             $card = $this->createCardForUser($user, $token);
+
+        return;
     }
 
     /**
@@ -91,6 +94,8 @@ trait PaymentsTrait
 
         if ($editCard)
             $this->createCardForUser($user, $token);
+
+        return;
     }
 
     /**
@@ -121,32 +126,32 @@ trait PaymentsTrait
         } catch(Stripe_CardError $e) {
             $pass = [
                 'pass' => false,
-                'message' => $e->getMessage()
+                'message' => $e->getMessage().'Stripe_CardError'
             ];
         } catch (Stripe_InvalidRequestError $e) {
             // Invalid parameters were supplied to Stripe's API
             $pass = [
                 'pass' => false,
-                'message' => $e->getMessage()
+                'message' => $e->getMessage().'Stripe_InvalidRequestError'
             ];
         } catch (Stripe_AuthenticationError $e) {
             // Authentication with Stripe's API failed
             $pass = [
                 'pass' => false,
-                'message' => $e->getMessage()
+                'message' => $e->getMessage().'Stripe_AuthenticationError'
             ];
         } catch (Stripe_ApiConnectionError $e) {
             // Network communication with Stripe failed
             $pass = [
                 'pass' => false,
-                'message' => $e->getMessage()
+                'message' => $e->getMessage().'Stripe_ApiConnectionError'
             ];
         } catch (Stripe_Error $e) {
             // Display a very generic error to the user, and maybe send
             // yourself an email
             $pass = [
                 'pass' => false,
-                'message' => $e->getMessage()
+                'message' => $e->getMessage().'Stripe_Error'
             ];
         } catch (Exception $e) {
             // Something else happened, completely unrelated to Stripe

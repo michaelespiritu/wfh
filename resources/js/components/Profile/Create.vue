@@ -25,7 +25,7 @@
                     </div>
                 </div>
                 <div>
-                    <button v-if="!loading" type="submit" class="btn btn-lg btn-primary btn-block" @click="create">Submit</button>
+                    <button v-if="!loading" type="submit" class="btn btn-lg btn-primary btn-block" @click="validateBeforeSubmit">Submit</button>
 
                     <div class="progress" v-if="loading">
                         <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
@@ -50,11 +50,11 @@ const customMessages = {
     }
 }
 
-import Validate from '../Misc/Validate'
+import SwalAlerts from '../Misc/SwalAlerts'
 
 export default {
     props: ['user'],
-    mixins: [Validate],
+    mixins: [SwalAlerts],
     data() {
         return {
             loading: false,
@@ -65,16 +65,56 @@ export default {
         this.$validator.localize('en', customMessages);
     },
     methods: {
-        create () {
+        validateBeforeSubmit () {
             this.loading = true
-            this.validateBeforeSubmit(
-                `/dashboard/profile`,
-                {
+
+            this.$validator.validateAll().then((result) => {
+                if(!result){
+                    this.errorAlert(
+                        'Some required fields are missing', 
+                        'Oopps',
+                        {
+                            onClose: () => {
+                                this.loading = false
+                            }
+                        }
+                    )
+                    
+                    return
+                }
+
+                this.create()
+            }).catch((e) => {
+                console.log(e)
+            });
+        },
+        create () {
+            axios.post(`/dashboard/profile`, {
                     name: this.$store.state.Profile.Name,
                     title: this.$store.state.Profile.Title,
-                }
-            )
-            this.loading = false
+            })
+            .then(response => {
+
+                this.successAlert(
+                    response.data.success, 
+                    null,
+                    {
+                        toast: true,
+                        position: 'top-end',
+                        showConfirmButton: false,
+                        timer: 1500,
+                        onClose: () => {
+                            this.loading = false
+                        }
+                    }
+                )
+                
+            }).catch(err => {
+                this.errorAlert(
+                    `Something went wrong. <br> ${ err.response.data.hasOwnProperty('message') ? '<span class="text-danger">Tip</span>: ' + err.response.data.message : ''}`, 
+                )
+            })
+
         }
     }
 }

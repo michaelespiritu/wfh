@@ -13,7 +13,7 @@ trait CreditsTrait
     public function buyCredits($user, $request)
     {
         return $user->employerCredit()->update([
-            'credit' => $request['credit']
+            'credit' => (int) $user->employerCredit->credit + (int) $request['credit']
         ]);
     }
 

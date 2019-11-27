@@ -53,8 +53,9 @@
 
 <script>
 import draggable from 'vuedraggable'
-
+import SwalAlerts from '../../Misc/SwalAlerts'
 export default {
+    mixins: [SwalAlerts],
     props: ['applicants', 'type'],
     components: {
         draggable,
@@ -86,22 +87,24 @@ export default {
             .then(response => {
                 console.log(response.data)
                 this.$store.commit('SET_APPLCIANT_WAITING', response.data.applicants)
-                this.$swal({
-                    type: 'success',
-                    title: message,
-                    toast: true,
-                    position: 'top-end',
-                    showConfirmButton: false,
-                    timer: 1500,
-                })
+                this.successAlert(
+                    message, 
+                    null,
+                    {
+                        toast: true,
+                        position: 'top-end',
+                        showConfirmButton: false,
+                        timer: 1500,
+                        onClose: () => {
+                            this.loading = false
+                        }
+                    }
+                )
                 
             }).catch(err => {
-                console.log(err)
-                this.$swal({
-                    type: 'error',
-                    title: 'Ooppss!',
-                    html: `Something went wrong. <br> ${ err.response.data.hasOwnProperty('message') ? '<span class="text-danger">Tip</span>: ' + err.response.data.message : ''}`,
-                })
+                this.errorAlert(
+                    `Something went wrong. <br> ${ err.response.data.hasOwnProperty('message') ? '<span class="text-danger">Tip</span>: ' + err.response.data.message : ''}`, 
+                )
             })
         }
     }

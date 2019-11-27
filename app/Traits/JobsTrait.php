@@ -2,6 +2,7 @@
 
 namespace App\Traits;
 
+use App\Model\Job;
 use Carbon\Carbon;
 use Illuminate\Support\Str;
 
@@ -15,6 +16,16 @@ trait JobsTrait
     public function checkIfCreditIsNotZero()
     {
         return (empty(auth()->user()->employerCredit->credit)) ? false : true;
+    }
+
+    /**
+     * Find the value of corresponding identifier
+     *
+     * @return App\Model\Job Object
+     */
+    public function findJob($identifier)
+    {
+        return Job::whereIdentifier($identifier)->first();
     }
 
     /**
@@ -60,6 +71,17 @@ trait JobsTrait
     }
 
     /**
+     * The Logic Update Job Expiration Only
+     *
+     * @param  $job $data
+     * @return object
+     */
+    public function updateJobExpiration($job)
+    {
+        return $job->update(['expiration' => Carbon::now()->addDays(60)]);
+    }
+
+    /**
      * The Logic Delete Job Post
      *
      * @param  $job
@@ -81,5 +103,23 @@ trait JobsTrait
         $data['identifier'] = Str::uuid();
         $data['user_id'] = auth()->user()->id;
         return $job->applicants()->create($data);
+    }
+
+    /**
+     * The Logic to Apply for Job Post
+     *
+     * @param  $job $data
+     * @return object
+     */
+    public function checkForTargetToBeUpdate($target, $user)
+    {
+        if (!empty($target)) {
+            $this->updateJobExpiration($this->findJob($target));
+            $this->lessJobCredit($user);
+
+            return;
+        }
+
+        return;
     }
 }

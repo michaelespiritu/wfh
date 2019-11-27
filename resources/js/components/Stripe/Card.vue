@@ -35,10 +35,14 @@
 
               <button 
                 class='my-4 btn btn-primary btn-block' 
-                @click="$emit('proceed', null, rememberCard, editCard)"
+                @click="$emit('proceed', null, rememberCard, editCard), loading = true"
                 v-if="!loading">
                   Pay with credit card
               </button>
+              
+              <div class="progress my-4" v-if="loading">
+                  <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+              </div>
 
               <p class="text-center">
                 <small>If you wish to edit your Credit Card information. 
@@ -49,9 +53,7 @@
                 </small>
               </p>
 
-              <div class="progress my-4" v-if="loading">
-                  <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
-              </div>
+              
           </div>
 
       </div>
@@ -111,7 +113,7 @@ export default {
 
   methods: {
     pay () {
-      // this.loading = true
+      this.loading = true
       // createToken returns a Promise which resolves in a result object with
       // either a token or an error key.
       // See https://stripe.com/docs/api#tokens for the token object.

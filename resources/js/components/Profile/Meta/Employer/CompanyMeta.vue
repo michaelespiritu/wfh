@@ -5,7 +5,7 @@
                 <div class="d-sm-flex justify-content-between align-content-between">
                     <h1 class="h3 mb-0 text-gray-800">Tell us about your Company</h1>
                     
-                    <button @click="create" class="w-full d-sm-inline-block btn btn-sm btn-primary shadow-sm">Save Changes</button>
+                    <button @click="validateBeforeSubmit" class="w-full d-sm-inline-block btn btn-sm btn-primary shadow-sm">Save Changes</button>
                 </div>
             </div>
             <div class="card-body">
@@ -74,38 +74,89 @@
 </template>
 
 <script>
-import Validate from '../../../Misc/Validate'
 import Wyswyg from '../../../Misc/Wyswyg'
+import SwalAlerts from '../../../Misc/SwalAlerts'
 
 export default {
     props: ['user'],
-    mixins: [Validate],
+    mixins: [SwalAlerts],
     components: {
         Wyswyg
     },
     methods: {
-        create () {
-            this.validateBeforeSubmit(
-                `/dashboard/meta-data/${this.$store.state.Profile.Identifier}`, 
-                [
-                    {
-                        name: 'company_name',
-                        value: this.$store.state.Profile.Company.Name,
-                    },
-                    {
-                        name: 'company_hq',
-                        value: this.$store.state.Profile.Company.HQ
-                    },
-                    {
-                        name: 'company_url',
-                        value: this.$store.state.Profile.Company.URL
-                    },
-                    {
-                        name: 'company_description',
-                        value: this.$store.state.Profile.Company.Description
-                    },
+        validateBeforeSubmit () {
+            this.loading = true
+
+            this.$validator.validateAll().then((result) => {
+                if(!result){
+                    this.errorAlert(
+                        'Some required fields are missing', 
+                        'Oopps',
+                        {
+                            onClose: () => {
+                                this.loading = false
+                            }
+                        }
+                    )
+                    
+                    return
+                }
+
+                var end = false
+
+                var payload = [
+                        {
+                            name: 'company_name',
+                            value: this.$store.state.Profile.Company.Name,
+                        },
+                        {
+                            name: 'company_hq',
+                            value: this.$store.state.Profile.Company.HQ
+                        },
+                        {
+                            name: 'company_url',
+                            value: this.$store.state.Profile.Company.URL
+                        },
+                        {
+                            name: 'company_description',
+                            value: this.$store.state.Profile.Company.Description
+                        },
                 ]
-            )
+
+                payload.forEach((val, key, array) => {
+                    if(!array[key + 1]) end = true
+                    this.create(val, end)
+                })
+
+            }).catch((e) => {
+                console.log(e)
+            });
+        },
+        create (payload, end) {
+            axios.post(`/dashboard/meta-data/${this.$store.state.Profile.Identifier}`, payload)
+            .then(response => {
+                
+                if (end) {
+                    this.successAlert(
+                        response.data.success, 
+                        null,
+                        {
+                            toast: true,
+                            position: 'top-end',
+                            showConfirmButton: false,
+                            timer: 1500,
+                            onClose: () => {
+                                this.loading = false
+                            }
+                        }
+                    )
+                }
+                
+            }).catch(err => {
+                this.errorAlert(
+                    `Something went wrong. <br> ${ err.response.data.hasOwnProperty('message') ? '<span class="text-danger">Tip</span>: ' + err.response.data.message : ''}`, 
+                )
+            })
         },
     }
 }

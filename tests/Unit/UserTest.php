@@ -42,9 +42,18 @@ class UserTest extends TestCase
     }
 
     /** @test */
-    public function jobCreditCanBeLessen()
+    public function jobCreditCanBeLessenIfNotZero()
     {
         $user = $this->signInEmployer();
+        $user->employerCredit()->update(['credit' => 2]);
+        $this->assertEquals($user->minusEmployerCredit(), 1);
+    }
+
+    /** @test */
+    public function jobCreditCannotBeLessenIfZero()
+    {
+        $user = $this->signInEmployer();
+        $user->employerCredit()->update(['credit' => 0]);
         $this->assertEquals($user->minusEmployerCredit(), 0);
     }
 

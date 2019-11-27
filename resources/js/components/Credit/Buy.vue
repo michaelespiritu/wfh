@@ -61,12 +61,17 @@ export default {
     data() {
         return {
             step: 3,
-            credit: 1
+            credit: 1,
+            target: null,
         }
     },
+    mounted () {
+        this.target = document.cookie.replace(/(?:(?:^|.*;\s*)__wfh_job_target\s*\=\s*([^;]*).*$)|^.*$/, "$1")
+    },  
     methods: {
         buy (value, rememberCard, editCard) {
             axios.post(`/credit/buy-credit`, {
+                target: this.target,
                 editCard: editCard,
                 credit: this.credit,
                 token: (value) && value.token
@@ -75,9 +80,14 @@ export default {
                     response.data.success, 
                     'Congratulations',
                     {
-                        // onClose: () => {
-                        //     location.href = '/jobs/create'    
-                        // }
+                        onClose: () => {
+                            if (this.target) {
+                                document.cookie = "__wfh_job_target=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+                                location.href = `/jobs/${this.target}`
+                            } else {
+                                location.href = '/jobs'    
+                            }
+                        }
                     }
                 )
             }).catch(error => {

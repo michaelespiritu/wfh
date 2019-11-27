@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use Carbon\Carbon;
 use Tests\TestCase;
 use App\Http\Resources\ApplicantResource;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -29,8 +30,9 @@ class JobsTest extends TestCase
     }
 
     /** @test */
-    public function employerCantPostIfCreditIsZero()
+    public function employerCanPostPostIfCreditIsZeroButWillNotBeActive()
     {
+        $this->withoutExceptionHandling();
         $user = $this->signInEmployer();
         $user->employerCredit->update(['credit' => 0]);
         
@@ -39,14 +41,18 @@ class JobsTest extends TestCase
             'title' => 'IT administrator',
             'type' => 'Full Time',
             'region_restriction' => 'PH only', 
-            'notify_email' => $user->email, 
+            'notify_email' => ['test@email.com'], 
             'skills' => ['Laravel', 'Angular'], 
             'budget' => ['amount' => '500', 'type' => 'Per Hour'], 
             'description' => 'Fuga totam reiciendis qui architecto fugiat nemo.'
         ]);
 
-        $create->assertStatus(403)
-        ->assertJsonFragment([ 'error' => 'You Dont have enough Job Credit.']);
+        $create->assertStatus(201)
+            ->assertJsonFragment(['success' => 'You Dont have enough Job Credit.']);
+
+        $this->assertDatabaseHas('job_openings', ['expiration' => null]);
+
+        $this->assertDatabaseHas('employer_credits', ['credit' => 0]);
     }
 
     /** @test */
@@ -71,6 +77,7 @@ class JobsTest extends TestCase
 
         $this->assertDatabaseHas('job_openings', [
             'category_id' => 1,
+            'expiration' => Carbon::now()->addDays(60),
             'title' => 'IT administrator',
             'region_restriction' => 'PH only', 
             'notify_email' => json_encode(['test@email.com', $user->email]), 
@@ -94,6 +101,7 @@ class JobsTest extends TestCase
 
         $update = $this->patch($job->path(), [
             'category_id' => 1,
+            'expiration' => Carbon::now()->addDays(60),
             'title' => 'IT administrator',
             'region_restriction' => 'EU only', 
             'notify_email' => $job->notify_email, 
