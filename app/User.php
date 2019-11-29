@@ -2,15 +2,16 @@
 
 namespace App;
 
-use App\Http\Resources\MetaResource;
-use App\Http\Resources\SkillsResource;
 use App\Model\Job;
 use App\Model\Role;
 use App\Model\Skill;
 use App\Model\Profile;
+use App\Model\Payments;
 use App\Model\UserMeta;
 use App\Model\Applicant;
 use App\Model\EmployerCredit;
+use App\Http\Resources\MetaResource;
+use App\Http\Resources\SkillsResource;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -149,6 +150,16 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->hasMany(Skill::class);
     }
+
+    /**
+     * The Payment history of user
+     * 
+     * @return App\Model\Payments
+     */
+    public function payments()
+    {
+        return $this->hasMany(Payments::class);
+    }
     
     /**
      * Output the name of user if Profile is Found to be append in User Object
@@ -238,5 +249,21 @@ class User extends Authenticatable implements MustVerifyEmail
         $skills .= "</ul>";
 
         return (!$this->skills->isEmpty()) ? $skills : null;
+    }
+
+    /**
+     * Compute the total purchase of User
+     * 
+     * @return string
+     */
+    public function computePurchase()
+    {
+        $total = 0; 
+        
+        foreach( $this->payments->pluck('amount') as $amount ) {
+            $total += $amount;
+        };
+
+        return $total;
     }
 }

@@ -50,6 +50,11 @@ class EmployerCreditTest extends TestCase
             'credit' => 2
         ]);
 
+        $this->assertDatabaseHas('payments', [
+            'user_id' => $user->id,
+            'amount' => 10
+        ]);
+
 
         $this->assertEquals($user->employerCredit->fresh()->credit, 2);
     }

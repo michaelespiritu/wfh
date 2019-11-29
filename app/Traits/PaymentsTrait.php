@@ -2,6 +2,7 @@
 
 namespace App\Traits;
 
+use Illuminate\Support\Str;
 use Cartalyst\Stripe\Laravel\Facades\Stripe;
 
 trait PaymentsTrait
@@ -119,6 +120,12 @@ trait PaymentsTrait
                 'amount'   => $amount,
             ]);
             
+            $user->payments()->create([
+                'identifier' => Str::uuid(),
+                'purchase_id' => $charge['id'],
+                'amount' => $amount
+            ]);
+
             $pass = [
                 'pass' => true,
                 'message' => $charge

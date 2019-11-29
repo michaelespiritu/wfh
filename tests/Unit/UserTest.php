@@ -110,4 +110,27 @@ class UserTest extends TestCase
 
         $this->assertEquals($user->convertSkillsToHtml(), null);
     }
+
+    /** @test */
+    public function CanComputeAllThePurchaseEvenIfNone()
+    {
+        $this->withoutExceptionHandling();
+
+        $user = $this->signInEmployee();
+
+        $this->assertEquals($user->computePurchase(), 0);
+    }
+
+    /** @test */
+    public function CanComputeAllThePurchase()
+    {
+        $this->withoutExceptionHandling();
+
+        $user = $this->signInEmployee();
+        factory('App\Model\Payments')->create(['user_id' => $user->id, 'amount' => 10]);
+        factory('App\Model\Payments')->create(['user_id' => $user->id, 'amount' => 20]);
+        factory('App\Model\Payments')->create(['user_id' => $user->id, 'amount' => 30]);
+
+        $this->assertEquals($user->computePurchase(), 60);
+    }
 }
