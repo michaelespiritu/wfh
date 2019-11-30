@@ -2,9 +2,9 @@
 
 namespace Tests\Unit;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
+use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class UserTest extends TestCase
 {   
@@ -58,6 +58,39 @@ class UserTest extends TestCase
     }
 
     /** @test */
+    public function willOutputProfileImage()
+    {
+        $this->withoutExceptionHandling();
+
+        $user = factory('App\User')->create(['role_id' => 2]);
+        factory('App\Model\Profile')->create(['user_id' => $user->id, 'profile_image' => 'https://source.unsplash.com/QAB-WJcbgJk/60x60']);
+
+        $this->assertEquals($user->profile_image, 'https://source.unsplash.com/QAB-WJcbgJk/60x60');
+    }
+
+
+    /** @test */
+    public function WillOutputCoverLetterIfFound()
+    {
+        $this->withoutExceptionHandling();
+
+        $user = $this->signInEmployer();
+        factory('App\Model\UserMeta')->create(['user_id' => $user->id, 'name' => 'cover_letter', 'value' => 'This is cover Letter']);
+
+        $this->assertEquals($user->coverLetter(), 'This is cover Letter');
+    }
+
+    /** @test */
+    public function WillOutputNullIfCoverLetterIfNotFound()
+    {
+        $this->withoutExceptionHandling();
+
+        $user = $this->signInEmployer();
+
+        $this->assertEquals($user->coverLetter(), null);
+    }
+
+    /** @test */
     public function willOutputCompanyNameIfFoundForEmployer()
     {
         $this->withoutExceptionHandling();
@@ -99,6 +132,23 @@ class UserTest extends TestCase
         $skill = factory('App\Model\Skill')->create(['user_id' => $user->id]);
 
         $this->assertEquals($user->convertSkillsToHtml(), "<ul class='list-inline mb-0'><li class='list-inline-item'><span class='badge badge-primary rounded-0 px-2'>Sales</span></li></ul>");
+    }
+
+    /** @test */
+    public function convertTheSkillsToHtmlWithLimit()
+    {
+        $this->withoutExceptionHandling();
+
+        $user = $this->signInEmployee();
+
+        factory('App\Model\Skill')->create(['user_id' => $user->id]);
+        factory('App\Model\Skill')->create(['user_id' => $user->id, 'skill' => [ 'name' => 'Admin', 'level' => 5 ]]);
+        factory('App\Model\Skill')->create(['user_id' => $user->id, 'skill' => [ 'name' => 'MS Word', 'level' => 5 ]]);
+        factory('App\Model\Skill')->create(['user_id' => $user->id, 'skill' => [ 'name' => 'MS Excel', 'level' => 5 ]]);
+        factory('App\Model\Skill')->create(['user_id' => $user->id, 'skill' => [ 'name' => 'PHP', 'level' => 5 ]]);
+        factory('App\Model\Skill')->create(['user_id' => $user->id, 'skill' => [ 'name' => 'JS', 'level' => 5 ]]);
+       
+        $this->assertEquals($user->convertSkillsToHtmlWithLimit(4), "<ul class='list-inline mb-0'><li class='list-inline-item'><span class='badge badge-primary rounded-0 px-2'>Sales</span></li><li class='list-inline-item'><span class='badge badge-primary rounded-0 px-2'>Admin</span></li><li class='list-inline-item'><span class='badge badge-primary rounded-0 px-2'>MS Word</span></li><li class='list-inline-item'><span class='badge badge-primary rounded-0 px-2'>MS Excel</span></li></ul>");
     }
 
     /** @test */

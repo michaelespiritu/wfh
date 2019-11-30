@@ -19,13 +19,17 @@ Route::middleware(['auth', 'checkProfile'])->group(function () {
     Route::post('/application/{applicant}/update-status', 'Employer\ApplicantController@updateStatus')->name('applicants.update.status');
 
     Route::get('/applicants/{job}', 'Employer\ApplicantController@index')->name('applicants.index');
+
     Route::get('/manage-applicants/{job}', 'Employer\ApplicantController@manage')->name('applicants.manage');
+
     Route::resource('applicants', 'Employer\ApplicantController')->except(
         'index', 'store'
     );
 
     Route::get('/credit/buy-credit', 'Employer\CreditController@create')->name('credit.create');
     Route::post('/credit/buy-credit', 'Employer\CreditController@store')->name('credit.store');
+
+    Route::resource('/talents', 'Employer\TalentsController');
 
 });
 

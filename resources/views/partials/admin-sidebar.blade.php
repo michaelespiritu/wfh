@@ -33,6 +33,11 @@
     </div>
   </div>
 </li>
+<li class="nav-item active">
+  <a class="nav-link" href="{{ route('talents.index') }}">
+    <i class="fas fa-fw fa-tachometer-alt"></i>
+    <span>Talents</span></a>
+</li>
 @else
 <li class="nav-item active">
   <a class="nav-link" href="{{ route('app.jobs.index') }}">

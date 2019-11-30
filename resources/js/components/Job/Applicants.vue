@@ -63,7 +63,7 @@
             :aria-labelledby="`applicantModal-${ $store.state.Applicant.Temp.identifier }-Label`" 
             aria-hidden="true">
             <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
-                <div class="modal-content">
+                <div class="modal-content rounded-0">
                     <div class="modal-header align-items-center">
                         <div>
                             <h5 

@@ -58609,7 +58609,7 @@ var render = function() {
                   attrs: { role: "document" }
                 },
                 [
-                  _c("div", { staticClass: "modal-content" }, [
+                  _c("div", { staticClass: "modal-content rounded-0" }, [
                     _c(
                       "div",
                       { staticClass: "modal-header align-items-center" },

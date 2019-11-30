@@ -20,7 +20,7 @@ class User extends Authenticatable implements MustVerifyEmail
 {
     use Notifiable;
 
-    protected $appends = ['name', 'title', 'meta', 'skills_bank', 'has_card'];
+    protected $appends = ['name', 'title', 'meta', 'skills_bank', 'has_card', 'profile_image'];
 
     /**
      * The attributes that are mass assignable.
@@ -212,6 +212,18 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     /**
+     * Output the Profile Image
+     * 
+     * @return string
+     */
+    public function getProfileImageAttribute()
+    {
+        return ($this->profile->profile_image) 
+                ? $this->profile->profile_image 
+                :  \Avatar::create($this->name)->toBase64();
+    }
+
+    /**
      * Output the Company Name if Found
      * 
      * @return string
@@ -236,11 +248,41 @@ class User extends Authenticatable implements MustVerifyEmail
      * 
      * @return string
      */
+    public function coverLetter()
+    {
+        return ($this->userMeta->where('name', 'cover_letter')->first()) ? $this->userMeta->where('name', 'cover_letter')->first()->value : null;
+    }
+
+    /**
+     * Convert the skills to html entity
+     * 
+     * @return string
+     */
     public function convertSkillsToHtml()
     {
         $skills = "<ul class='list-inline mb-0'>";
 
         foreach($this->skills as $skill) {
+            $name =  $skill->skill['name'];
+            
+            $skills .= "<li class='list-inline-item'><span class='badge badge-primary rounded-0 px-2'>$name</span></li>";
+        }
+
+        $skills .= "</ul>";
+
+        return (!$this->skills->isEmpty()) ? $skills : null;
+    }
+
+    /**
+     * Convert the skills to html entity with limit
+     * 
+     * @return string
+     */
+    public function convertSkillsToHtmlWithLimit($limit = 2)
+    {
+        $skills = "<ul class='list-inline mb-0'>";
+
+        foreach($this->skills->take($limit) as $skill) {
             $name =  $skill->skill['name'];
             
             $skills .= "<li class='list-inline-item'><span class='badge badge-primary rounded-0 px-2'>$name</span></li>";

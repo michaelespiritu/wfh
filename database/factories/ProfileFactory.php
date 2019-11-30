@@ -8,6 +8,7 @@ use Faker\Generator as Faker;
 $factory->define(Profile::class, function (Faker $faker) {
     return [
         'name' => $faker->name(),
-        'title' => $faker->title()
+        'title' => $faker->title(),
+        'profile_image' => null
     ];
 });
