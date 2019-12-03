@@ -86,7 +86,7 @@
 
 @foreach($talents as $talent)
 
-<div class="col-md-3 col lg-4">
+<div class="col-md-6 col lg-3">
     @component('talents.talent-card', ['talent' => $talent])
     @endcomponent
 </div>
@@ -95,4 +95,5 @@
 
 </div>
 @endsection
+
 

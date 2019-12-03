@@ -57,8 +57,10 @@
 
 <script>
 import wyswyg from '../../Misc/Wyswyg'
+import SwalAlerts from '../../Misc/SwalAlerts'
 
 export default {
+    mixins: [SwalAlerts],
     props: ['job'],
     components: {
         wyswyg
@@ -80,11 +82,8 @@ export default {
             this.$store.commit('SET_LOADING', true)
             this.$validator.validateAll().then((result) => {
                 if(!result){
-                    this.$swal({
-                        type: 'warning',
-                        title: 'Oooppps!',
-                        html: 'Some required fields are missing',
-                    })
+
+                    this.errorAlert('Some required fields are missing.')
 
                     return
                 }
@@ -99,29 +98,32 @@ export default {
                 cover_letter: this.$store.state.Profile.Applicant.CoverLetter
             })
             .then(response => {
-                this.$swal({
-                    type: 'success',
-                    title: response.data.success,
-                    toast: true,
-                    position: 'top-end',
-                    showConfirmButton: false,
-                    timer: 1500,
-                    onClose: () => {
-                        $('#applyModal').modal('hide')
-                        this.$store.commit('SET_LOADING', false)
+                this.successAlert(
+                    response.data.success,
+                    'Success',
+                    {
+                        toast: true,
+                        position: 'top-end',
+                        showConfirmButton: false,
+                        timer: 1500,
+                        onClose: () => {
+                            $('#applyModal').modal('hide')
+                            this.$store.commit('SET_LOADING', false)
+                        }
                     }
-                })
+                )
             }).catch(err => {
                 console.log(err)
-                this.$swal({
-                    type: 'error',
-                    title: 'Ooppss!',
-                    html: `Something went wrong. <br> ${ err.response.data.hasOwnProperty('message') ? '<span class="text-danger">Tip</span>: ' + err.response.data.message : ''}`,
-                    onClose: () => {
-                        $('#applyModal').modal('hide')
-                        this.$store.commit('SET_LOADING', false)
+                this.errorAlert(
+                    `Something went wrong. <br> ${ err.response.data.hasOwnProperty('message') ? '<span class="text-danger">Tip</span>: ' + err.response.data.message : ''}`,
+                    'Ooppss!',
+                    {
+                        onClose: () => {
+                            $('#applyModal').modal('hide')
+                            this.$store.commit('SET_LOADING', false)
+                        }
                     }
-                })
+                )
             })
         }
     }

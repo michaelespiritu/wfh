@@ -27,8 +27,8 @@
 						</small>
 					</p>	
 				</div>
-				<div class="message">
-					<p class="mb-0">
+				<div class="message" data-toggle="modal" data-target="#talent-message-{{$talent->identifier}}">
+					<p class="mb-0" >
 						<small>
 							Message
 						</small>
@@ -77,6 +77,38 @@
 
 				</div>
 
+				
+			</div>
+
+		</div>
+
+	</div>
+</div>
+
+<div 
+	class="modal fade" 
+	id="talent-message-{{$talent->identifier}}"
+	tabindex="-1" 
+	role="dialog" 
+	aria-labelledby="talent-message-{{$talent->identifier}}-Label" 
+	aria-hidden="true">
+	<div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+		<div class="modal-content rounded-0">
+			<div class="modal-header align-items-center">
+				<h5 
+					class="modal-title mb-0" 
+					id="talent-message-{{$talent->identifier}}-Label">
+					Send Message to {{ $talent->name }}
+				</h5>
+
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+
+			<div class="modal-body">
+
+				<send-message receiver="{{ $talent->identifier }}" modal="talent-message-{{$talent->identifier}}"></send-message>
 				
 			</div>
 

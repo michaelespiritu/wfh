@@ -2,10 +2,22 @@
 
 namespace App\Traits;
 
+use App\User;
 use Illuminate\Support\Str;
 
 trait UserTrait
 {
+    /**
+     * Find User via identifier
+     * 
+     * @return object
+     * @param $identifier
+     */
+    public function findUser($identifier)
+    {
+        return User::whereIdentifier($identifier)->firstOrFail();
+    }
+
     /**
      * Create Credit for Employer to be used in Job Posting
      * 

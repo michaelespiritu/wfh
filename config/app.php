@@ -226,6 +226,7 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
         'Stripe' => Cartalyst\Stripe\Laravel\Facades\Stripe::class,
+        'Helpers' => App\Helpers::class,
         'Avatar' => Laravolt\Avatar\Facade::class,
     ],
 

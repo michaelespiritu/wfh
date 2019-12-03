@@ -68,6 +68,17 @@ class UserTest extends TestCase
         $this->assertEquals($user->profile_image, 'https://source.unsplash.com/QAB-WJcbgJk/60x60');
     }
 
+    /** @test */
+    public function willOutputProfileImageIfNoFound()
+    {
+        $this->withoutExceptionHandling();
+
+        $user = factory('App\User')->create(['role_id' => 2]);
+        factory('App\Model\Profile')->create(['user_id' => $user->id]);
+
+        $this->assertEquals($user->profile_image, null);
+    }
+
 
     /** @test */
     public function WillOutputCoverLetterIfFound()

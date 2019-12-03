@@ -19,7 +19,7 @@ export default {
 
             this.$swal(param)
         },
-        errorAlert (message, title = null, options = null) {
+        errorAlert (message = 'Something went wrong please try again.', title = null, options = null) {
             var param = this.swalParam('error', message, title, options)
 
             this.$swal(param)

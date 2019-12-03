@@ -2,9 +2,11 @@
 
 namespace App;
 
+use Helpers;
 use App\Model\Job;
 use App\Model\Role;
 use App\Model\Skill;
+use App\Model\Message;
 use App\Model\Profile;
 use App\Model\Payments;
 use App\Model\UserMeta;
@@ -132,7 +134,7 @@ class User extends Authenticatable implements MustVerifyEmail
 
 
     /**
-     * The Applications of User
+     * The Applications of User [Talent]
      * 
      * @return App\Model\Job
      */
@@ -142,7 +144,7 @@ class User extends Authenticatable implements MustVerifyEmail
     }
     
     /**
-     * The Skills of User
+     * The Skills of User [Talent]
      * 
      * @return App\Model\Skill
      */
@@ -152,13 +154,23 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     /**
-     * The Payment history of user
+     * The Payment history of user [Employer]
      * 
      * @return App\Model\Payments
      */
     public function payments()
     {
         return $this->hasMany(Payments::class);
+    }
+
+    /**
+     * The Message History of User
+     * 
+     * @return App\Model\Message
+     */
+    public function messages()
+    {
+        return $this->hasMany(Message::class, 'sender_id');
     }
     
     /**
@@ -220,7 +232,7 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return ($this->profile->profile_image) 
                 ? $this->profile->profile_image 
-                :  \Avatar::create($this->name)->toBase64();
+                :  Helpers::convertNameToImage($this->name);
     }
 
     /**
@@ -234,7 +246,7 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     /**
-     * Output the Company URL if Found
+     * Output the Company URL if Found [Employer]
      * 
      * @return string
      */
@@ -244,7 +256,7 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     /**
-     * Output the Company URL if Found
+     * Output the Company URL if Found [Employer]
      * 
      * @return string
      */
@@ -254,7 +266,7 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     /**
-     * Convert the skills to html entity
+     * Convert the skills to html entity [Talent]
      * 
      * @return string
      */
@@ -274,7 +286,7 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     /**
-     * Convert the skills to html entity with limit
+     * Convert the skills to html entity with limit [Talent]
      * 
      * @return string
      */
@@ -294,7 +306,7 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     /**
-     * Compute the total purchase of User
+     * Compute the total purchase of User [Employer]
      * 
      * @return string
      */

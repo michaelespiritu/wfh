@@ -2,6 +2,7 @@
     <div>
         <input 
             id="wyswygEditor"
+            ref="wyswygInput"
             :value="value"
             type="hidden">
 

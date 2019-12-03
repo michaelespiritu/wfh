@@ -33,6 +33,9 @@ Route::middleware(['auth', 'checkProfile'])->group(function () {
 
 });
 
+Route::middleware(['auth', 'checkProfile'])->prefix('message')->group(function () {
+    Route::resource('/', 'Account\MessageController');
+});
 Route::middleware(['auth', 'checkProfile'])->prefix('app')->group(function () {
     Route::resource('/jobs', 'Applicant\JobsController', [
         'as' => 'app'
