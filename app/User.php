@@ -15,6 +15,7 @@ use App\Model\EmployerCredit;
 use App\Http\Resources\MetaResource;
 use App\Http\Resources\SkillsResource;
 use Illuminate\Notifications\Notifiable;
+use App\Http\Resources\ConversationResource;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
@@ -178,13 +179,15 @@ class User extends Authenticatable implements MustVerifyEmail
      * 
      * @return mixed
      */
-	public function accessibleProjects()
+	public function accessibleConversations()
 	{
-	    return Conversation::where('owner_id', $this->id)
+	    $conversation = Conversation::where('owner_id', $this->id)
             ->orWhereHas('members', function ($query) {
                 $query->where('user_id', $this->id);
             })
             ->get();
+
+        return ConversationResource::collection($conversation);
     }
     
     // /**

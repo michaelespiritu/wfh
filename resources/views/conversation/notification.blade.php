@@ -4,7 +4,7 @@
         Message Center
     </h6>
     
-        @forelse(auth()->user()->accessibleProjects() as $conversation)
+        @forelse(auth()->user()->accessibleConversations() as $conversation)
         <a class="dropdown-item d-flex align-items-center" href="#">
             <div class="dropdown-list-image mr-3">
                 <img 

@@ -1829,6 +1829,67 @@ module.exports = {
 
 /***/ }),
 
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/Conversation/All.vue?vue&type=script&lang=js&":
+/*!***************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/Conversation/All.vue?vue&type=script&lang=js& ***!
+  \***************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _Body__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Body */ "./resources/js/components/Conversation/Body.vue");
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  components: {
+    bodyMessage: _Body__WEBPACK_IMPORTED_MODULE_0__["default"]
+  },
+  props: ['conversations'],
+  data: function data() {
+    return {
+      tempMessage: null
+    };
+  },
+  methods: {
+    setTemp: function setTemp(data) {
+      this.tempMessage = data.messages;
+    }
+  }
+});
+
+/***/ }),
+
 /***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/Conversation/Body.vue?vue&type=script&lang=js&":
 /*!****************************************************************************************************************************************************************************!*\
   !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/Conversation/Body.vue?vue&type=script&lang=js& ***!
@@ -1844,8 +1905,41 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['messages']
+  props: ['messages'],
+  mounted: function mounted() {
+    this.scrollToBottom();
+  },
+  updated: function updated() {
+    this.scrollToBottom();
+  },
+  methods: {
+    scrollToBottom: function scrollToBottom() {
+      document.getElementById("chat-box").scrollTop = document.getElementById("chat-box").scrollHeight;
+    }
+  }
 });
 
 /***/ }),
@@ -4263,6 +4357,7 @@ __webpack_require__.r(__webpack_exports__);
   created: function created() {
     this.$store.commit('SET_NAME', this.user.name);
     this.$store.commit('SET_IDENTIFIER', this.user.identifier);
+    this.$store.commit('SET_ID', this.user.id);
     this.$store.commit('SET_HAS_CARD', this.user.has_card);
     this.$store.commit('SET_TITLE', this.user.profile ? this.user.profile.title : null);
     this.$store.commit('SET_SKILLS', this.user.skills_bank);
@@ -58149,21 +58244,68 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _vm._m(0)
+  return _c("div", { staticClass: "row" }, [
+    _c(
+      "div",
+      { staticClass: "col-2 border py-0 px-0" },
+      _vm._l(_vm.conversations, function(conversation, index) {
+        return _c(
+          "div",
+          {
+            key: index,
+            staticClass:
+              "d-md-flex align-items-center justify-center py-2 px-2 border-bottom text-md-left text-center",
+            on: {
+              click: function($event) {
+                return _vm.setTemp(conversation)
+              }
+            }
+          },
+          [
+            _c("div", { staticClass: "pr-md-3" }, [
+              _c("img", {
+                staticClass: "rounded-circle",
+                attrs: {
+                  src: conversation.owner.profile_image.encoded,
+                  alt: conversation.owner.name,
+                  width: "50",
+                  height: "50"
+                }
+              })
+            ]),
+            _vm._v(" "),
+            _c("div", [
+              _c("p", { staticClass: "small text-gray-500 mb-0" }, [
+                _vm._v(_vm._s(conversation.members))
+              ]),
+              _vm._v(" "),
+              _c("p", { staticClass: "small text-gray-500 mb-0" }, [
+                _vm._v(_vm._s(conversation.latest_message.sent_at))
+              ])
+            ])
+          ]
+        )
+      }),
+      0
+    ),
+    _vm._v(" "),
+    _c(
+      "div",
+      {
+        staticClass: "col-10 border py-3 px-3 overflow-auto",
+        staticStyle: { height: "550px" },
+        attrs: { id: "chat-box" }
+      },
+      [
+        _vm.tempMessage
+          ? _c("body-message", { attrs: { messages: _vm.tempMessage } })
+          : _vm._e()
+      ],
+      1
+    )
+  ])
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", [
-      _c("div", {
-        staticClass:
-          "d-md-flex align-items-center justify-center py-2 px-2 border-bottom text-md-left text-center"
-      })
-    ])
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 
 
@@ -58185,7 +58327,50 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div")
+  return _c(
+    "div",
+    { staticClass: "clearfix" },
+    _vm._l(_vm.messages, function(message, index) {
+      return _c(
+        "div",
+        {
+          key: index,
+          staticClass: "w-75 mb-3",
+          class: {
+            "float-right": message.owner.id == _vm.$store.state.Profile.Id,
+            "float-left d-flex align-items-center":
+              message.owner.id != _vm.$store.state.Profile.Id
+          }
+        },
+        [
+          message.owner.id != _vm.$store.state.Profile.Id
+            ? _c("div", { staticClass: "pr-md-3" }, [
+                _c("img", {
+                  staticClass: "rounded-circle",
+                  attrs: {
+                    src: message.owner.profile_image.encoded,
+                    alt: message.owner.name,
+                    width: "50",
+                    height: "50"
+                  }
+                })
+              ])
+            : _vm._e(),
+          _vm._v(" "),
+          _c("div", { staticClass: "rounded-lg px-2 py-2 bg-white " }, [
+            _c("p", { staticClass: "small" }, [
+              _vm._v(
+                _vm._s(message.owner.name) + "  · " + _vm._s(message.sent_at)
+              )
+            ]),
+            _vm._v(" "),
+            _c("div", { domProps: { innerHTML: _vm._s(message.message) } })
+          ])
+        ]
+      )
+    }),
+    0
+  )
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -78506,15 +78691,17 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _All_vue_vue_type_template_id_24665c40___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./All.vue?vue&type=template&id=24665c40& */ "./resources/js/components/Conversation/All.vue?vue&type=template&id=24665c40&");
-/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+/* harmony import */ var _All_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./All.vue?vue&type=script&lang=js& */ "./resources/js/components/Conversation/All.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
-var script = {}
+
+
 
 
 /* normalize component */
 
-var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_1__["default"])(
-  script,
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _All_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
   _All_vue_vue_type_template_id_24665c40___WEBPACK_IMPORTED_MODULE_0__["render"],
   _All_vue_vue_type_template_id_24665c40___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
   false,
@@ -78528,6 +78715,20 @@ var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_
 if (false) { var api; }
 component.options.__file = "resources/js/components/Conversation/All.vue"
 /* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/Conversation/All.vue?vue&type=script&lang=js&":
+/*!*******************************************************************************!*\
+  !*** ./resources/js/components/Conversation/All.vue?vue&type=script&lang=js& ***!
+  \*******************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_All_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib??ref--4-0!../../../../node_modules/vue-loader/lib??vue-loader-options!./All.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/Conversation/All.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_All_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
 
 /***/ }),
 
@@ -80297,6 +80498,7 @@ var mutations = {
 __webpack_require__.r(__webpack_exports__);
 var getDefaultState = function getDefaultState() {
   return {
+    Id: null,
     Identifier: null,
     Name: null,
     Title: null,
@@ -80327,6 +80529,9 @@ var actions = {
   }
 };
 var mutations = {
+  SET_ID: function SET_ID(state, data) {
+    state.Id = data;
+  },
   SET_IDENTIFIER: function SET_IDENTIFIER(state, data) {
     state.Identifier = data;
   },
