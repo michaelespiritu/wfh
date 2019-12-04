@@ -24,7 +24,9 @@ Vue.component('applicants', require('./components/Job/Applicants.vue').default);
 Vue.component('manage-applicants', require('./components/Job/ManageApplicants/Container.vue').default);
 Vue.component('applicant-status', require('./components/Job/ApplicantStatus.vue').default);
 
-Vue.component('send-message', require('./components/Message/Create.vue').default);
+Vue.component('send-message', require('./components/Conversation/Create.vue').default);
+Vue.component('conversation-message', require('./components/Conversation/Body.vue').default);
+Vue.component('my-conversation', require('./components/Conversation/All.vue').default);
 
 const app = new Vue({
     el: '#app',

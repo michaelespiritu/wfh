@@ -38,7 +38,9 @@
             </div>
             
 
-            <div itemprop="description" class="text-left mb-3">{!! strip_tags(Str::limit($job->description,350)) !!}</div>
+            <div itemprop="description" class="text-left mb-3 text-truncate">
+                {!! Helpers::cutConvertedText($job->description, 250) !!}
+            </div>
 
             <p class="mb-0">
                 <small>

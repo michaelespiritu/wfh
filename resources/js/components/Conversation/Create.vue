@@ -57,7 +57,7 @@ export default {
         submitDetails () {
             this.loading = true
 
-            axios.post('/message', {
+            axios.post('/conversation', {
                 message: this.message,
                 receiver_id: this.receiver
             }).then( response => {

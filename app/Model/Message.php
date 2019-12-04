@@ -2,6 +2,7 @@
 
 namespace App\Model;
 
+use App\User;
 use Illuminate\Database\Eloquent\Model;
 
 class Message extends Model
@@ -12,7 +13,7 @@ class Message extends Model
      * @var array
      */
     protected $fillable = [
-        'identifier', 'sender_id', 'receiver_id', 'reply_to', 'message', 'read'
+        'identifier', 'conversation_id', 'from_id', 'message', 'read'
     ];
 
     /**
@@ -24,4 +25,15 @@ class Message extends Model
     {
         return 'identifier';
     }
+
+    /**
+     * Get the User Model of Sender.
+     *
+     * @return App\User
+     */
+    public function owner()
+    {
+        return $this->belongsTo(User::class, 'from_id');
+    }
+
 }

@@ -6,11 +6,11 @@ use Helpers;
 use App\Model\Job;
 use App\Model\Role;
 use App\Model\Skill;
-use App\Model\Message;
 use App\Model\Profile;
 use App\Model\Payments;
 use App\Model\UserMeta;
 use App\Model\Applicant;
+use App\Model\Conversation;
 use App\Model\EmployerCredit;
 use App\Http\Resources\MetaResource;
 use App\Http\Resources\SkillsResource;
@@ -164,14 +164,48 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     /**
-     * The Message History of User
+     * The Conversations History of User
      * 
-     * @return App\Model\Message
+     * @return App\Model\Conversations
      */
-    public function messages()
+    public function conversations()
     {
-        return $this->hasMany(Message::class, 'sender_id');
+        return $this->hasMany(Conversation::class, 'owner_id');
     }
+
+    /**
+     * Get All Conversations History of User that has access to.
+     * 
+     * @return mixed
+     */
+	public function accessibleProjects()
+	{
+	    return Conversation::where('owner_id', $this->id)
+            ->orWhereHas('members', function ($query) {
+                $query->where('user_id', $this->id);
+            })
+            ->get();
+    }
+    
+    // /**
+    //  * The Message History of User
+    //  * 
+    //  * @return App\Model\Message
+    //  */
+    // public function messagesSender()
+    // {
+    //     return $this->hasMany(Message::class, 'sender_id');
+    // }
+
+    // /**
+    //  * The Message History of User
+    //  * 
+    //  * @return App\Model\Message
+    //  */
+    // public function messagesReceiver()
+    // {
+    //     return $this->hasMany(Message::class, 'receiver_id');
+    // }
     
     /**
      * Output the name of user if Profile is Found to be append in User Object
