@@ -13,6 +13,7 @@ export default {
     created () {
         this.$store.commit('SET_NAME', this.user.name)
         this.$store.commit('SET_IDENTIFIER', this.user.identifier)
+        this.$store.commit('SET_ROLE', this.user.role_id)
         this.$store.commit('SET_ID', this.user.id)
         this.$store.commit('SET_HAS_CARD', this.user.has_card)
         this.$store.commit('SET_TITLE', this.user.profile ? this.user.profile.title : null)

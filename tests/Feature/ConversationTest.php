@@ -40,4 +40,26 @@ class ConversationTest extends TestCase
             'user_id' => $talent->id
         ]);
     }
+
+    /** @test */
+    public function conversationCanHaveReplies()
+    {
+        $this->withoutExceptionHandling();
+        
+        $user = $this->signInEmployee();
+
+        $conversation = factory('App\Model\Conversation')->create();
+
+        $conversation->members()->attach( $user );
+
+        $reply = $this->post("{$conversation->path()}/reply", [
+            'message' => 'Reply Message',
+        ]);
+                
+        $this->assertDatabaseHas('messages', [
+            'conversation_id' => $conversation->id,
+            'from_id' => $user->id,
+            'message' => 'Reply Message'
+        ]);
+    }
 }

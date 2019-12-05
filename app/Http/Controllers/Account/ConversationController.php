@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers\Account;
 
-use App\Http\Controllers\Controller;
-use App\Traits\MessagesTrait;
+use App\Model\Conversation;
 use Illuminate\Http\Request;
+use App\Traits\MessagesTrait;
+use App\Http\Controllers\Controller;
+use App\Http\Resources\ConversationResource;
 
 class ConversationController extends Controller
 {
@@ -43,6 +45,20 @@ class ConversationController extends Controller
         $this->createMessage($conversation, request()->message, auth()->user()->id);
 
         $this->attachMembersToConversation($conversation, request()->receiver_id);
+    }
+
+    /**
+     * Store a newly created reply for conversation.
+     * @return \Illuminate\Http\Response
+     */
+    public function reply(Conversation $conversation)
+    {
+        $this->createMessage($conversation, request()->message, auth()->user()->id);
+
+        return response()->json([
+            'conversations' => auth()->user()->accessibleConversations(),
+            'conversation' => ConversationResource::make($conversation->fresh())
+        ]);
     }
 
     /**

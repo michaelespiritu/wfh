@@ -22,7 +22,11 @@ class ConversationResource extends JsonResource
                 'sent_at' => $this->latestMessage()->created_at->format('M. j, Y h:i'),
                 'message' => $this->latestMessage()->message
             ],
-            'messages' => MessageResource::collection($this->messages)
+            'latest_member' => [
+                'data' => $this->latestMember(),
+            ],
+            'messages' => MessageResource::collection($this->messages),
+            'path' => $this->path()
         ];
     }
 }

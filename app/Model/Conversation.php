@@ -76,4 +76,14 @@ class Conversation extends Model
     {
         return $this->members->last();
     }
+
+    /**
+     * Get the path of Model.
+     *
+     * @return string
+     */
+    public function path()
+    {
+        return "/conversation/$this->identifier";
+    }
 }

@@ -39,6 +39,7 @@ Route::middleware(['auth', 'checkProfile'])->group(function () {
 
 Route::middleware(['auth', 'checkProfile'])->group(function () {
     Route::resource('/conversation', 'Account\ConversationController');
+    Route::post('/conversation/{conversation}/reply', 'Account\ConversationController@reply')->name('conversation.reply');
 });
 
 Route::middleware(['auth', 'checkProfile'])->prefix('app')->group(function () {

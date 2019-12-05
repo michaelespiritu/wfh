@@ -1,5 +1,6 @@
 const getDefaultState = () => {
     return {
+      Role: null,
       Id: null,
       Identifier: null,
       Name: null,
@@ -31,6 +32,9 @@ const getDefaultState = () => {
   }
   
   const mutations = {
+        SET_ROLE(state, data) {
+            state.Role = data;
+        },
         SET_ID(state, data) {
             state.Id = data;
         },
