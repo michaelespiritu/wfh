@@ -14,7 +14,7 @@ class Conversation extends Model
      * @var array
      */
     protected $fillable = [
-        'identifier', 'owner_id'
+        'identifier', 'owner_id', 'read'
     ];
 
     /**
@@ -26,6 +26,15 @@ class Conversation extends Model
     {
         return 'identifier';
     }
+
+    /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'read' => 'datetime',
+    ];
 
     /**
      * The Owner of Conversation
@@ -75,6 +84,16 @@ class Conversation extends Model
     public function latestMember()
     {
         return $this->members->last();
+    }
+
+    /**
+     * Determine if the conversation was read or not.
+     * 
+     * @return bool
+     */
+    public function wasRead()
+    {
+        return (!empty($this->read)) ? true : false;
     }
 
     /**

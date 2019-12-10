@@ -5,10 +5,9 @@
                 v-for="(conversation, index) in $store.state.Messages.Messages"
                 :key="index"
                 @click="setTemp(conversation)"
-                :class="{'bg-dark' : $store.state.Messages.TempMessage.path == conversation.path}"
+                :class="{'bg-gray-200' : $store.state.Messages.TempMessage.path == conversation.path, 'bg-dark' : !conversation.unread}"
                 class="d-md-flex align-items-center justify-center py-2 px-2 border-bottom text-md-left text-center">
                 <div class="pr-md-3">
-
                     <img 
                         class="rounded-circle" 
                         :src="($store.state.Profile.Role == 1) ? conversation.latest_member.data.profile_image.encoded : conversation.owner.profile_image.encoded" 
@@ -74,6 +73,12 @@ export default {
     },
     methods: {
         setTemp (data) {
+            axios.get(`${data.path}/read`)
+            .then(response => {
+                console.log(response.data.conversations)
+                this.$store.commit('SET_UNREAD_MESSAGE', response.data.conversation)
+                this.$store.commit('SET_MESSAGES', response.data.conversations)
+            })
             this.$store.commit('SET_TEMP_MESSAGE', data)
             document.cookie = "__wfh_message_target=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
         }

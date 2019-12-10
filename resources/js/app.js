@@ -9,6 +9,7 @@ Vue.use(VeeValidate)
 Vue.use(VueSweetalert2)
 
 Vue.component('user-name', require('./components/UserName.vue').default);
+Vue.component('user-message-notification', require('./components/UserMessageNotification.vue').default);
 
 Vue.component('create-job', require('./components/Job/Create.vue').default);
 Vue.component('edit-job', require('./components/Job/edit.vue').default);

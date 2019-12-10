@@ -33,13 +33,14 @@ Route::middleware(['auth', 'checkProfile'])->group(function () {
 
 });
 
-// Route::middleware(['auth', 'checkProfile'])->prefix('message')->group(function () {
-//     Route::resource('/', 'Account\MessageController');
-// });
-
 Route::middleware(['auth', 'checkProfile'])->group(function () {
-    Route::resource('/conversation', 'Account\ConversationController');
+    Route::resource('/conversation', 'Account\ConversationController')->except(
+        'create', 'show', 'edit', 'update'
+    );
+
     Route::post('/conversation/{conversation}/reply', 'Account\ConversationController@reply')->name('conversation.reply');
+
+    Route::get('/conversation/{conversation}/read', 'Account\ConversationController@read')->name('conversation.read');
 });
 
 Route::middleware(['auth', 'checkProfile'])->prefix('app')->group(function () {

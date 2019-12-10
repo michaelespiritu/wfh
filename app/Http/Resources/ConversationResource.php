@@ -26,6 +26,7 @@ class ConversationResource extends JsonResource
                 'data' => $this->latestMember(),
             ],
             'messages' => MessageResource::collection($this->messages),
+            'unread' => $this->wasRead(),
             'path' => $this->path()
         ];
     }

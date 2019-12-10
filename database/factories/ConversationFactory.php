@@ -9,5 +9,6 @@ $factory->define(Conversation::class, function (Faker $faker) {
     return [
         'identifier' => $faker->uuid(),
         'owner_id' => factory('App\User')->create(['role_id' => 1]),
+        'read' => null
     ];
 });

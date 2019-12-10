@@ -3,6 +3,7 @@
 namespace App\Model;
 
 use App\User;
+use App\Model\Conversation;
 use Illuminate\Database\Eloquent\Model;
 
 class Message extends Model
@@ -13,7 +14,7 @@ class Message extends Model
      * @var array
      */
     protected $fillable = [
-        'identifier', 'conversation_id', 'from_id', 'message', 'read'
+        'identifier', 'conversation_id', 'from_id', 'message'
     ];
 
     /**
@@ -34,6 +35,26 @@ class Message extends Model
     public function owner()
     {
         return $this->belongsTo(User::class, 'from_id');
+    }
+
+    /**
+     * The Conversation of Message
+     * 
+     * @return bool
+     */
+    public function conversation()
+    {
+        return $this->belongsTo(Conversation::class);
+    }
+
+    /**
+     * Get the path of Model.
+     *
+     * @return string
+     */
+    public function path()
+    {
+        return "/message/$this->identifier";
     }
 
 }

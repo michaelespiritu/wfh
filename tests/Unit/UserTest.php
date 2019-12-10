@@ -74,7 +74,7 @@ class UserTest extends TestCase
         $this->withoutExceptionHandling();
 
         $user = factory('App\User')->create(['role_id' => 2]);
-        factory('App\Model\Profile')->create(['user_id' => $user->id]);
+        factory('App\Model\Profile')->create(['user_id' => $user->id, 'profile_image' => null]);
 
         $this->assertEquals($user->profile_image, null);
     }
@@ -193,5 +193,15 @@ class UserTest extends TestCase
         factory('App\Model\Payments')->create(['user_id' => $user->id, 'amount' => 30]);
 
         $this->assertEquals($user->computePurchase(), 60);
+    }
+
+    /** @test */
+    public function OutputNumberOfUnreadConveration()
+    {
+        $this->withoutExceptionHandling();
+        $user = $this->signInEmployer();
+        factory('App\Model\Conversation')->create(['owner_id' => $user->id]);
+
+        $this->assertEquals($user->unread_messages, 1);
     }
 }

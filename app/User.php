@@ -23,7 +23,7 @@ class User extends Authenticatable implements MustVerifyEmail
 {
     use Notifiable;
 
-    protected $appends = ['name', 'title', 'meta', 'skills_bank', 'has_card', 'profile_image'];
+    protected $appends = ['name', 'title', 'meta', 'skills_bank', 'has_card', 'profile_image', 'unread_messages'];
 
     /**
      * The attributes that are mass assignable.
@@ -187,28 +187,8 @@ class User extends Authenticatable implements MustVerifyEmail
             })
             ->get();
 
-        return ConversationResource::collection($conversation);
+        return ConversationResource::collection($conversation->fresh());
     }
-    
-    // /**
-    //  * The Message History of User
-    //  * 
-    //  * @return App\Model\Message
-    //  */
-    // public function messagesSender()
-    // {
-    //     return $this->hasMany(Message::class, 'sender_id');
-    // }
-
-    // /**
-    //  * The Message History of User
-    //  * 
-    //  * @return App\Model\Message
-    //  */
-    // public function messagesReceiver()
-    // {
-    //     return $this->hasMany(Message::class, 'receiver_id');
-    // }
     
     /**
      * Output the name of user if Profile is Found to be append in User Object
@@ -270,6 +250,16 @@ class User extends Authenticatable implements MustVerifyEmail
         return ($this->profile->profile_image) 
                 ? $this->profile->profile_image 
                 :  Helpers::convertNameToImage($this->name);
+    }
+
+    /**
+     * Output the Number of unread Message
+     * 
+     * @return string
+     */
+    public function getUnreadMessagesAttribute()
+    {
+        return count($this->conversations()->where('read', null)->get());
     }
 
     /**

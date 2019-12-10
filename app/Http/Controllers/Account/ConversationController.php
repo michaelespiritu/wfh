@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\Account;
 
+use App\Model\Message;
 use App\Model\Conversation;
-use Illuminate\Http\Request;
 use App\Traits\MessagesTrait;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ConversationResource;
@@ -20,16 +20,6 @@ class ConversationController extends Controller
     public function index()
     {
         return view('conversation.all');
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
     }
 
     /**
@@ -62,39 +52,19 @@ class ConversationController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
+     * Mark the conversation as read.
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function read(Conversation $conversation)
     {
-        //
-    }
+        $this->markAsRead($conversation);
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
+        return response()->json([
+            'conversation' => auth()->user()->unread_messages,
+            'conversations' => auth()->user()->accessibleConversations(),
+        ]);
     }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
+    
     /**
      * Remove the specified resource from storage.
      *

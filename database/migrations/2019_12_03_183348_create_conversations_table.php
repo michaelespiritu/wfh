@@ -17,6 +17,7 @@ class CreateConversationsTable extends Migration
             $table->bigIncrements('id');
             $table->string('identifier')->unique(); 
             $table->unsignedBigInteger('owner_id');
+            $table->timestamp('read')->nullable();
             $table->timestamps();
 
             $table->foreign('owner_id')->references('id')->on('users')->onDelete('cascade');

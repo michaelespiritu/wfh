@@ -1880,7 +1880,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -1918,6 +1917,15 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     setTemp: function setTemp(data) {
+      var _this = this;
+
+      axios.get("".concat(data.path, "/read")).then(function (response) {
+        console.log(response.data.conversations);
+
+        _this.$store.commit('SET_UNREAD_MESSAGE', response.data.conversation);
+
+        _this.$store.commit('SET_MESSAGES', response.data.conversations);
+      });
       this.$store.commit('SET_TEMP_MESSAGE', data);
       document.cookie = "__wfh_message_target=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
     }
@@ -4497,6 +4505,7 @@ __webpack_require__.r(__webpack_exports__);
     this.$store.commit('SET_HAS_CARD', this.user.has_card);
     this.$store.commit('SET_TITLE', this.user.profile ? this.user.profile.title : null);
     this.$store.commit('SET_SKILLS', this.user.skills_bank);
+    this.$store.commit('SET_UNREAD_MESSAGE', this.user.unread_messages);
     var that = this;
     this.user.meta.map(function (val) {
       if (val.name == 'company_name') {
@@ -58441,8 +58450,9 @@ var render = function() {
             staticClass:
               "d-md-flex align-items-center justify-center py-2 px-2 border-bottom text-md-left text-center",
             class: {
-              "bg-dark":
-                _vm.$store.state.Messages.TempMessage.path == conversation.path
+              "bg-gray-200":
+                _vm.$store.state.Messages.TempMessage.path == conversation.path,
+              "bg-dark": !conversation.unread
             },
             on: {
               click: function($event) {
@@ -62348,6 +62358,65 @@ var render = function() {
           ])
         ])
   ])
+}
+var staticRenderFns = []
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/UserMessageNotification.vue?vue&type=template&id=657438ac&":
+/*!**************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/UserMessageNotification.vue?vue&type=template&id=657438ac& ***!
+  \**************************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "li",
+    { staticClass: "nav-item dropdown no-arrow mx-1" },
+    [
+      _c(
+        "a",
+        {
+          staticClass: "nav-link dropdown-toggle",
+          attrs: {
+            href: "#",
+            id: "messagesDropdown",
+            role: "button",
+            "data-toggle": "dropdown",
+            "aria-haspopup": "true",
+            "aria-expanded": "false"
+          }
+        },
+        [
+          _c("i", { staticClass: "fas fa-envelope fa-fw" }),
+          _vm._v(" "),
+          _c("span", { staticClass: "badge badge-danger badge-counter" }, [
+            _vm._v(
+              _vm._s(
+                _vm.$store.state.Profile.UnreadMessage != 0
+                  ? _vm.$store.state.Profile.UnreadMessage
+                  : ""
+              )
+            )
+          ])
+        ]
+      ),
+      _vm._v(" "),
+      _vm._t("default")
+    ],
+    2
+  )
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -78908,6 +78977,7 @@ window.Vue = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.
 Vue.use(vee_validate__WEBPACK_IMPORTED_MODULE_0__["default"]);
 Vue.use(vue_sweetalert2__WEBPACK_IMPORTED_MODULE_1__["default"]);
 Vue.component('user-name', __webpack_require__(/*! ./components/UserName.vue */ "./resources/js/components/UserName.vue")["default"]);
+Vue.component('user-message-notification', __webpack_require__(/*! ./components/UserMessageNotification.vue */ "./resources/js/components/UserMessageNotification.vue")["default"]);
 Vue.component('create-job', __webpack_require__(/*! ./components/Job/Create.vue */ "./resources/js/components/Job/Create.vue")["default"]);
 Vue.component('edit-job', __webpack_require__(/*! ./components/Job/edit.vue */ "./resources/js/components/Job/edit.vue")["default"]);
 Vue.component('remove-job', __webpack_require__(/*! ./components/Job/Remove.vue */ "./resources/js/components/Job/Remove.vue")["default"]);
@@ -80683,6 +80753,59 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./resources/js/components/UserMessageNotification.vue":
+/*!*************************************************************!*\
+  !*** ./resources/js/components/UserMessageNotification.vue ***!
+  \*************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _UserMessageNotification_vue_vue_type_template_id_657438ac___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./UserMessageNotification.vue?vue&type=template&id=657438ac& */ "./resources/js/components/UserMessageNotification.vue?vue&type=template&id=657438ac&");
+/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+var script = {}
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_1__["default"])(
+  script,
+  _UserMessageNotification_vue_vue_type_template_id_657438ac___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _UserMessageNotification_vue_vue_type_template_id_657438ac___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/UserMessageNotification.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/UserMessageNotification.vue?vue&type=template&id=657438ac&":
+/*!********************************************************************************************!*\
+  !*** ./resources/js/components/UserMessageNotification.vue?vue&type=template&id=657438ac& ***!
+  \********************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_UserMessageNotification_vue_vue_type_template_id_657438ac___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../node_modules/vue-loader/lib??vue-loader-options!./UserMessageNotification.vue?vue&type=template&id=657438ac& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/UserMessageNotification.vue?vue&type=template&id=657438ac&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_UserMessageNotification_vue_vue_type_template_id_657438ac___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_UserMessageNotification_vue_vue_type_template_id_657438ac___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
 /***/ "./resources/js/components/UserName.vue":
 /*!**********************************************!*\
   !*** ./resources/js/components/UserName.vue ***!
@@ -80937,7 +81060,8 @@ var getDefaultState = function getDefaultState() {
       Description: null,
       Logo: null,
       HQ: null
-    }
+    },
+    UnreadMessage: 0
   };
 };
 
@@ -80994,6 +81118,9 @@ var mutations = {
   },
   SET_COMPANY_DESCRIPTION: function SET_COMPANY_DESCRIPTION(state, data) {
     state.Company.Description = data;
+  },
+  SET_UNREAD_MESSAGE: function SET_UNREAD_MESSAGE(state, data) {
+    state.UnreadMessage = data;
   }
 };
 /* harmony default export */ __webpack_exports__["default"] = ({

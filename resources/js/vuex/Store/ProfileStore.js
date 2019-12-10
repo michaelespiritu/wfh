@@ -1,22 +1,23 @@
 const getDefaultState = () => {
     return {
-      Role: null,
-      Id: null,
-      Identifier: null,
-      Name: null,
-      Title: null,
-      HasCard: false,
-      Applicant: {
-        Skills: [],
-        CoverLetter: null,
-      },
-      Company: {
+        Role: null,
+        Id: null,
+        Identifier: null,
+        Name: null,
+        Title: null,
+        HasCard: false,
+        Applicant: {
+            Skills: [],
+            CoverLetter: null,
+        },
+        Company: {
             Name: null,
             URL: null,
             Description: null,
             Logo: null,
             HQ: null,
-        }
+        },
+        UnreadMessage: 0
     }
   }
   
@@ -73,6 +74,9 @@ const getDefaultState = () => {
         },
         SET_COMPANY_DESCRIPTION(state, data) {
             state.Company.Description = data
+        },
+        SET_UNREAD_MESSAGE(state, data) {
+            state.UnreadMessage = data
         },
   }
   

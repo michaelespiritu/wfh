@@ -18,6 +18,7 @@ export default {
         this.$store.commit('SET_HAS_CARD', this.user.has_card)
         this.$store.commit('SET_TITLE', this.user.profile ? this.user.profile.title : null)
         this.$store.commit('SET_SKILLS', this.user.skills_bank)
+        this.$store.commit('SET_UNREAD_MESSAGE', this.user.unread_messages)
 
         var that = this
         this.user.meta.map(function (val) {

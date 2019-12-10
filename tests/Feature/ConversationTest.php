@@ -2,9 +2,10 @@
 
 namespace Tests\Feature;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
+use Carbon\Carbon;
 use Tests\TestCase;
+use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class ConversationTest extends TestCase
 {
@@ -26,13 +27,14 @@ class ConversationTest extends TestCase
         ]);
 
         $this->assertDatabaseHas('conversations', [
-            'owner_id' => $user->id
+            'owner_id' => $user->id,
+            'read' => null
         ]);
 
         $this->assertDatabaseHas('messages', [
             'conversation_id' => 1,
             'from_id' => $user->id,
-            'message' => 'This is a message'
+            'message' => 'This is a message',
         ]);
 
         $this->assertDatabaseHas('conversation_members', [
@@ -49,17 +51,41 @@ class ConversationTest extends TestCase
         $user = $this->signInEmployee();
 
         $conversation = factory('App\Model\Conversation')->create();
+        factory('App\Model\Profile')->create(['user_id' => $conversation->owner->id]);
 
         $conversation->members()->attach( $user );
 
         $reply = $this->post("{$conversation->path()}/reply", [
             'message' => 'Reply Message',
         ]);
-                
+
         $this->assertDatabaseHas('messages', [
             'conversation_id' => $conversation->id,
             'from_id' => $user->id,
             'message' => 'Reply Message'
+        ]);
+
+        $this->assertDatabaseHas('conversations', [
+            'read' => null
+        ]);
+    }
+
+    /** @test */
+    public function conversationCanBeRead()
+    {
+        $this->withoutExceptionHandling();
+        
+        $this->signInEmployee();
+
+        $conversation = factory('App\Model\Conversation')->create();
+        $message = factory('App\Model\Message')->create(['conversation_id' => $conversation->id]);
+        $conversation->update(['unread' => 1]);
+
+        $this->get("{$conversation->path()}/read");
+
+        $this->assertDatabaseHas('conversations', [
+            'id' => $message->conversation->id,
+            'read' => Carbon::now()
         ]);
     }
 }
