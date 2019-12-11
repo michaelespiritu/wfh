@@ -3,7 +3,6 @@
     <h6 class="dropdown-header">
         Message Center
     </h6>
-    
         @forelse(auth()->user()->accessibleConversations() as $conversation)
         <a class="dropdown-item d-flex align-items-center {{ ( !$conversation->wasRead() ) ? 'bg-dark text-white' : '' }}" onClick="document.cookie = '__wfh_message_target=/conversation/{{ $conversation->identifier }}; path=/'" href="{{ route('conversation.index') }}">
             <div class="dropdown-list-image mr-3">

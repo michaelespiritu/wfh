@@ -14,7 +14,7 @@ class Conversation extends Model
      * @var array
      */
     protected $fillable = [
-        'identifier', 'owner_id', 'read'
+        'identifier', 'owner_id', 'read', 'lastest_message'
     ];
 
     /**
@@ -93,7 +93,11 @@ class Conversation extends Model
      */
     public function wasRead()
     {
-        return (!empty($this->read)) ? true : false;
+        if (auth()->user()->id == $this->latestMessage()->from_id) {
+            return true;
+        } else {
+            return (!empty($this->read)) ? true : false;
+        }
     }
 
     /**

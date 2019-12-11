@@ -52,7 +52,6 @@ class ConversationTest extends TestCase
 
         $conversation = factory('App\Model\Conversation')->create();
         factory('App\Model\Profile')->create(['user_id' => $conversation->owner->id]);
-
         $conversation->members()->attach( $user );
 
         $reply = $this->post("{$conversation->path()}/reply", [

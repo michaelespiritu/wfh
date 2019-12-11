@@ -196,12 +196,34 @@ class UserTest extends TestCase
     }
 
     /** @test */
-    public function OutputNumberOfUnreadConveration()
+    public function OutputNumberOfUnreadConverationIfSender()
     {
         $this->withoutExceptionHandling();
-        $user = $this->signInEmployer();
-        factory('App\Model\Conversation')->create(['owner_id' => $user->id]);
 
-        $this->assertEquals($user->unread_messages, 1);
+        $user = $this->signInEmployer();
+
+        $conversation = factory('App\Model\Conversation')->create(['owner_id' => $user->id]);
+
+        $message = factory('App\Model\Message')->create(['conversation_id' => $conversation->id, 'from_id' => $user->id]);
+
+        $this->assertEquals($user->unread_messages, 0);
+    }
+
+    /** @test */
+    public function OutputNumberOfUnreadConverationIfReceiver()
+    {
+        $this->withoutExceptionHandling();
+
+        $user = factory('App\User')->create();
+
+        $conversation = factory('App\Model\Conversation')->create(['owner_id' => $user->id]);
+
+        factory('App\Model\Message')->create(['conversation_id' => $conversation->id, 'from_id' => $user->id]);
+
+        $conversation->members()->attach( $receiver = factory('App\User')->create() );
+
+        $this->actingAs( $receiver );
+
+        $this->assertEquals($receiver->unread_messages, 1);
     }
 }

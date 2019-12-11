@@ -1919,13 +1919,16 @@ __webpack_require__.r(__webpack_exports__);
     setTemp: function setTemp(data) {
       var _this = this;
 
-      axios.get("".concat(data.path, "/read")).then(function (response) {
-        console.log(response.data.conversations);
+      if (this.$store.state.Profile.Id != data.latest_message.sender) {
+        axios.get("".concat(data.path, "/read")).then(function (response) {
+          console.log(response.data.conversations);
 
-        _this.$store.commit('SET_UNREAD_MESSAGE', response.data.conversation);
+          _this.$store.commit('SET_UNREAD_MESSAGE', response.data.conversation);
 
-        _this.$store.commit('SET_MESSAGES', response.data.conversations);
-      });
+          _this.$store.commit('SET_MESSAGES', response.data.conversations);
+        });
+      }
+
       this.$store.commit('SET_TEMP_MESSAGE', data);
       document.cookie = "__wfh_message_target=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
     }

@@ -73,12 +73,14 @@ export default {
     },
     methods: {
         setTemp (data) {
-            axios.get(`${data.path}/read`)
-            .then(response => {
-                console.log(response.data.conversations)
-                this.$store.commit('SET_UNREAD_MESSAGE', response.data.conversation)
-                this.$store.commit('SET_MESSAGES', response.data.conversations)
-            })
+            if (this.$store.state.Profile.Id != data.latest_message.sender) {
+                axios.get(`${data.path}/read`)
+                .then(response => {
+                    console.log(response.data.conversations)
+                    this.$store.commit('SET_UNREAD_MESSAGE', response.data.conversation)
+                    this.$store.commit('SET_MESSAGES', response.data.conversations)
+                })
+            }
             this.$store.commit('SET_TEMP_MESSAGE', data)
             document.cookie = "__wfh_message_target=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
         }

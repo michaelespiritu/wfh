@@ -19,6 +19,7 @@ class ConversationResource extends JsonResource
             'owner' => $this->owner,
             'members' => $this->members->implode('name', ', '),
             'latest_message' => [
+                'sender' => $this->latestMessage()->from_id,
                 'sent_at' => $this->latestMessage()->created_at->format('M. j, Y h:i'),
                 'message' => $this->latestMessage()->message
             ],

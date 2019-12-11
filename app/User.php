@@ -259,7 +259,20 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     public function getUnreadMessagesAttribute()
     {
-        return count($this->conversations()->where('read', null)->get());
+        $conversations = Conversation::where('owner_id', $this->id)
+            ->orWhereHas('members', function ($query) {
+                $query->where('user_id', $this->id);
+            })
+            ->get();
+
+        $unread = 0;
+
+        foreach ($conversations as $conversation) {
+            if ($conversation->latestMessage()->from_id != auth()->user()->id && $conversation->read == null) {
+                $unread++;
+            }
+        }
+        return $unread;
     }
 
     /**
