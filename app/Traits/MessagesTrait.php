@@ -18,8 +18,12 @@ trait MessagesTrait
      */
     public function startConversation($user, $data)
     {
-        $data['identifier'] = Str::uuid();
-        return $user->conversations()->create($data);
+        if ( $conversation = $user->isConversationMember( $data['receiver_id'] ) ) {
+            return $conversation;
+        } else {
+            $data['identifier'] = Str::uuid();
+            return $user->conversations()->create($data);
+        }
     }
 
     /**
@@ -74,7 +78,11 @@ trait MessagesTrait
      */
     public function attachMembersToConversation($conversation, $member)
     {
-        $conversation->members()->attach( $this->findUser($member) );
+        $user = $this->findUser($member);
+
+        if (!$conversation->isMember($user)) {
+            $conversation->members()->attach( $user );
+        }
     }
 
 }

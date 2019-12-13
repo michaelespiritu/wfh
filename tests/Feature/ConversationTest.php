@@ -44,6 +44,38 @@ class ConversationTest extends TestCase
     }
 
     /** @test */
+    public function ConverstationWillAppendMessageIfFoundAndWillNotBeAddedToMemberAgain()
+    {
+        $this->withoutExceptionHandling();
+
+        $sender = $this->signInEmployee();
+        
+        $conversation = factory('App\Model\Conversation')->create(['owner_id' => $sender->id]);
+        factory('App\Model\Conversation')->create(['owner_id' => $sender->id]);
+
+        $conversation->members()->attach( $user = factory('App\User')->create() );
+
+        $create = $this->post('/conversation', [
+            'receiver_id' => $user->identifier,
+            'message' => 'This is a message'
+        ]);
+
+        $this->assertDatabaseHas('conversations', [
+            'id' => $conversation->id,
+            'identifier' => $conversation->identifier,
+            'owner_id' => $sender->id,
+            'read' => null
+        ]);
+
+        $this->assertDatabaseHas('messages', [
+            'conversation_id' => $conversation->id,
+            'from_id' => $sender->id,
+            'message' => 'This is a message',
+        ]);
+
+    }
+
+    /** @test */
     public function conversationCanHaveReplies()
     {
         $this->withoutExceptionHandling();

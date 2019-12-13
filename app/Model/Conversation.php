@@ -101,6 +101,16 @@ class Conversation extends Model
     }
 
     /**
+     * Determine if the User is already part of conversation.
+     * 
+     * @return bool
+     */
+    public function isMember($user)
+    {
+        return $this->members->contains($user);
+    }
+
+    /**
      * Get the path of Model.
      *
      * @return string

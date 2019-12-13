@@ -2,7 +2,6 @@
 
 namespace Tests\Unit;
 
-use Carbon\Carbon;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -61,5 +60,67 @@ class ConversationTest extends TestCase
         $this->actingAs($user);
         
         $this->assertEquals($conversation->wasRead(), false);
+    }
+
+    /** @test */
+    public function ConversationCanDetermineIfTheReceiverIsAlreadyAMember()
+    {
+        $sender = $this->signInEmployee();
+        
+        $conversation = factory('App\Model\Conversation')->create(['owner_id' => $sender->id]);
+        $conversation2 = factory('App\Model\Conversation')->create(['owner_id' => $sender->id]);
+
+        factory('App\Model\Message')->create(['conversation_id' => $conversation->id, 'from_id' => $sender->id]);
+
+        $conversation->members()->attach( $user = factory('App\User')->create() );
+
+        $this->assertJson($conversation, $sender->isConversationMember($user->identifier));
+    }
+
+    /** @test */
+    public function ConversationCanDetermineIfTheReceiverIsNotAMember()
+    {
+        $sender = $this->signInEmployee();
+        
+        $conversation = factory('App\Model\Conversation')->create(['owner_id' => $sender->id]);
+        $conversation2 = factory('App\Model\Conversation')->create(['owner_id' => $sender->id]);
+
+        factory('App\Model\Message')->create(['conversation_id' => $conversation->id, 'from_id' => $sender->id]);
+
+        $user = factory('App\User')->create();
+
+        $this->assertEquals($sender->isConversationMember($user->identifier), null);
+    }
+
+    /** @test */
+    public function OutputNumberOfUnreadConverationIfSender()
+    {
+        $this->withoutExceptionHandling();
+
+        $user = $this->signInEmployer();
+
+        $conversation = factory('App\Model\Conversation')->create(['owner_id' => $user->id]);
+
+        $message = factory('App\Model\Message')->create(['conversation_id' => $conversation->id, 'from_id' => $user->id]);
+
+        $this->assertEquals($user->unread_messages, 0);
+    }
+
+    /** @test */
+    public function OutputNumberOfUnreadConverationIfReceiver()
+    {
+        $this->withoutExceptionHandling();
+
+        $user = factory('App\User')->create();
+
+        $conversation = factory('App\Model\Conversation')->create(['owner_id' => $user->id]);
+
+        factory('App\Model\Message')->create(['conversation_id' => $conversation->id, 'from_id' => $user->id]);
+
+        $conversation->members()->attach( $receiver = factory('App\User')->create() );
+
+        $this->actingAs( $receiver );
+
+        $this->assertEquals($receiver->unread_messages, 1);
     }
 }

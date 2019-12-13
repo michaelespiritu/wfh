@@ -259,20 +259,30 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     public function getUnreadMessagesAttribute()
     {
-        $conversations = Conversation::where('owner_id', $this->id)
-            ->orWhereHas('members', function ($query) {
-                $query->where('user_id', $this->id);
-            })
-            ->get();
-
         $unread = 0;
 
-        foreach ($conversations as $conversation) {
+        foreach ($this->accessibleConversations() as $conversation) {
             if ($conversation->latestMessage()->from_id != auth()->user()->id && $conversation->read == null) {
                 $unread++;
             }
         }
         return $unread;
+    }
+
+    /**
+     * Determine if the Target User is Already a member of conversation
+     * 
+     * @return string
+     */
+    public function isConversationMember($user)
+    {
+        $this->whereIdentifier($user);
+        $conversation = $this->conversations()->whereHas('members', function ($query) use ($user){
+                $query->where('user_id', $this->whereIdentifier($user)->first()->id);
+            })
+            ->first();
+
+        return ($conversation) ? $conversation  : null;
     }
 
     /**
