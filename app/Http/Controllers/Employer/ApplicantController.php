@@ -8,6 +8,8 @@ use Illuminate\Http\Request;
 use App\Traits\ApplicantsTrait;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ApplicantResource;
+use App\Http\Resources\JobBoardResource;
+use App\Model\JobBoard;
 
 class ApplicantController extends Controller
 {
@@ -21,15 +23,9 @@ class ApplicantController extends Controller
     public function manage(Job $job)
     {
         $this->authorize('viewAny', Job::class);
-        
-        $waiting = $job->applicants->where('status', '=', 'Waiting');
-        $reject = $job->applicants->where('status', '=', 'Reject');
-        $shortlist = $job->applicants->where('status', '=', 'Shortlist');
 
         return view('jobs.manage-applicants')
-            ->with('waiting', ApplicantResource::collection($waiting))
-            ->with('reject', ApplicantResource::collection($reject))
-            ->with('shortlist', ApplicantResource::collection($shortlist))
+            ->with('boards', JobBoardResource::collection($job->jobBoards))
             ->with('job', $job);
     }
 
@@ -38,24 +34,16 @@ class ApplicantController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Job $job)
+    public function index(Job $job, JobBoard $board)
     {
         $this->authorize('viewAny', Job::class);
         
-        $applicants = $job->applicants;
-
-        $type = 'all';
-
-        if ( isset($_GET['type']) ) {
-            $applicants = $job->applicants->where('status', '=', $_GET['type']);
-            $type = $_GET['type'];
-        }
-
+        $applicants = $board->applicants;
 
         return view('jobs.applicants')
             ->with('applicants', ApplicantResource::collection($applicants))
-            ->with('job', $job)
-            ->with('type', $type);
+            ->with('board', $board)
+            ->with('job', $job);
     }
 
     /**
@@ -67,15 +55,15 @@ class ApplicantController extends Controller
     {
         $this->updateApplicantStatus($applicant, request()->all());
 
-        $applicants = $applicant->job->applicants;
+        $applicants = JobBoardResource::collection($applicant->job->jobBoards->fresh());
 
-        if ( request()->type != 'all' ) {
-            $applicants = $applicant->job->applicants->where('status', '=', request()->type);
+        if ( isset($_GET['b']) ) {
+            $applicants = ApplicantResource::collection($this->getApplicant($_GET['b']));
         }
 
         return response()->json([
             'success' => 'Applicant Status has been Updated.',
-            'applicants' => ApplicantResource::collection($applicants->fresh())
+            'applicants' => $applicants
         ]);
     }
 

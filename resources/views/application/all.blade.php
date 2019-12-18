@@ -36,7 +36,7 @@
 
 
                         <p class="mb-0">
-                            <span class="badge badge-{{ $application->status }}">{{ $application->status }}</span>
+                            <span class="badge badge-{{ $application->status }}">{{ $application->status->name }}</span>
                             &#8226;
                             <small>
                                 <span>

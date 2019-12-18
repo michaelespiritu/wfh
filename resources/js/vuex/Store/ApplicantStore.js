@@ -1,6 +1,7 @@
 const getDefaultState = () => {
     return {
       Data: [],
+      Boards: [],
       Waiting: [],
       Reject: [],
       Shortlist: [],
@@ -51,6 +52,9 @@ const getDefaultState = () => {
         },
         SET_APPLCIANT_SHORTLIST(state, data) {
             state.Shortlist = data;
+        },
+        SET_JOB_BOARD(state, data) {
+            state.Boards = data;
         },
   }
   

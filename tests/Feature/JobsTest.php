@@ -4,8 +4,6 @@ namespace Tests\Feature;
 
 use Carbon\Carbon;
 use Tests\TestCase;
-use App\Http\Resources\ApplicantResource;
-use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class JobsTest extends TestCase
@@ -174,7 +172,7 @@ class JobsTest extends TestCase
         $applicant = factory('App\Model\Applicant')->create(['job_id' => $job->id, 'user_id' => $employee->id]);
 
         $update = $this->post("/application/$applicant->identifier/update-status", [
-            'status' => $waiting->id
+            'status' => $waiting->identifier
         ]);
 
         $update->assertStatus(200)

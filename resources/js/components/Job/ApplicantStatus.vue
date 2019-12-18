@@ -2,12 +2,12 @@
     <div>
         <select 
             @change="updateStatus"
-            v-model="$store.state.Applicant.Temp.status.id" 
+            v-model="$store.state.Applicant.Temp.status.identifier" 
             class="custom-select custom-select-sm">
             <option 
                 v-for="(board, index) in boards"
                 :key="index"
-                :value="board.id">{{ board.name}}</option>
+                :value="board.identifier">{{ board.name}}</option>
         </select>
         
     </div>
@@ -15,12 +15,12 @@
 
 <script>
 export default {
-    props: ['id', 'boards'],
+    props: ['id', 'boards', 'board'],
     methods: {
         updateStatus () {
-            axios.post(`/application/${this.$store.state.Applicant.Temp.identifier}/update-status`, {
-                status: this.$store.state.Applicant.Temp.status.id,
-                type: this.$store.state.Applicant.Type
+            axios.post(`/application/${this.$store.state.Applicant.Temp.identifier}/update-status?b=${this.board.identifier}`, 
+            {
+                status: this.$store.state.Applicant.Temp.status.identifier
             }).then(response => {
                 console.log(response.data.applicants)
                 this.$store.commit('RESET_APPLICANT_DATA')

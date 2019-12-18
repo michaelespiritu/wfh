@@ -39,12 +39,12 @@
         </div>
 
         <div class="col-xl-6 col-md-6 mb-4">
-            <div class="card border-left-{{ $application->status }} shadow h-100 py-2">
+            <div class="card border-left-{{ $application->status->name }} shadow h-100 py-2">
             <div class="card-body">
                 <div class="row no-gutters align-items-center">
                 <div class="col mr-2">
-                    <div class="text-xs font-weight-bold text-{{ $application->status }} text-uppercase mb-1">Status</div>
-                    <div class="h5 mb-0 font-weight-bold text-gray-800">{{ $application->status }}</div>
+                    <div class="text-xs font-weight-bold text-{{ $application->status->name }} text-uppercase mb-1">Status</div>
+                    <div class="h5 mb-0 font-weight-bold text-gray-800">{{ $application->status->name }}</div>
                     <p class="mb-0"><small>Date applied: {{ $application->created_at->format('M d, Y') }}</small></p>
                 </div>
                 <div class="col-auto">

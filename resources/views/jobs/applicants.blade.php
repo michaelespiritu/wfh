@@ -10,24 +10,23 @@
     <div>
         <ul class="list-inline mb-0">
 
-            <li class="list-inline-item"><a href="{{ route('applicants.index', [$job, 'type' => 'Waiting']) }}" class="w-full d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i class="fas fa-hourglass-start"></i> Waiting</a></li>
+            @foreach( $job->jobBoards as $jobBoard )
+            <li class="list-inline-item"><a href="{{ route('applicants.index', [$job->identifier, $jobBoard->identifier]) }}" class="w-full d-sm-inline-block btn btn-sm badge-{{ $jobBoard->name }} btn-primary shadow-sm">{{ $jobBoard->name }}</a></li>
 
-            <li class="list-inline-item"><a href="{{ route('applicants.index', [$job, 'type' => 'Shortlist']) }}" class="w-full d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i class="fas fa-check"></i> Shortlist</a></li>
-
-            <li class="list-inline-item"><a href="{{ route('applicants.index', [$job, 'type' => 'Reject']) }}" class="w-full d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i class="fas fa-calendar"></i> Rejected</a></li>
+            @endforeach
 
             <li class="list-inline-item"><a href="{{ route('applicants.manage', $job) }}" class="w-full d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i class="fas fa-wrench"></i> Manage Applicant</a></li>
 
-
         </ul>
+        
     </div>
 
   </div>
 </div>
 <div class="container-fluid">
     <applicants 
-            :boards="{{ $job->jobBoard }}"
-            type="{{ $type }}"
+            :board="{{ $board }}"
+            :boards="{{ $job->jobBoards }}"
             :applicants="{{ json_encode($applicants) }}">
             </applicants>
 </div>

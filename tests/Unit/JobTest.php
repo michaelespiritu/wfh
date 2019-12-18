@@ -57,9 +57,10 @@ class JobTest extends TestCase
         $user = $this->signInEmployer();
 
         $job = factory('App\Model\Job')->create(['owner_id' => $user->id, 'budget' => ['amount' => '0', 'type' => 'DOE']]);
+
         factory('App\Model\Applicant')->create(['job_id' => $job]);
-        factory('App\Model\Applicant')->create(['job_id' => $job, 'status' => 'Reject']);
-        factory('App\Model\Applicant')->create(['job_id' => $job, 'status' => 'Waiting']);
+        factory('App\Model\Applicant')->create(['job_id' => $job]);
+        factory('App\Model\Applicant')->create(['job_id' => $job]);
 
         $this->assertEquals('3 Applicants', $job->applicantCountTextOutput());
     }
@@ -67,13 +68,18 @@ class JobTest extends TestCase
     /** @test */
     public function jobWillTransformTheApplicantCountWithParam()
     {
+        $this->withoutExceptionHandling();
         $user = $this->signInEmployer();
 
         $job = factory('App\Model\Job')->create(['owner_id' => $user->id, 'budget' => ['amount' => '0', 'type' => 'DOE']]);
-        factory('App\Model\Applicant')->create(['job_id' => $job]);
-        factory('App\Model\Applicant')->create(['job_id' => $job, 'status' => 'Reject']);
+        
+        factory('App\Model\JobBoard')->create(['job_id' => $job->id, 'name' => 'Waiting']);
+        $reject = factory('App\Model\JobBoard')->create(['job_id' => $job->id, 'name' => 'Rejected']);
 
-        $this->assertEquals('1 Applicant', $job->applicantCountTextOutput('Reject'));
+        factory('App\Model\Applicant')->create(['job_id' => $job]);
+        factory('App\Model\Applicant')->create(['job_id' => $job, 'status_id' => $reject->id]);
+        
+        $this->assertEquals('1 Applicant', $job->applicantCountTextOutput($reject->identifier));
     }
 
     /** @test */

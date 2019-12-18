@@ -3,6 +3,7 @@
 namespace App\Model;
 
 use App\Model\Job;
+use App\Model\Applicant;
 use Illuminate\Database\Eloquent\Model;
 
 class JobBoard extends Model
@@ -34,5 +35,15 @@ class JobBoard extends Model
     public function job()
     {
         return $this->belongsTo(Job::class);
+    }
+
+    /**
+     * Get the Job Model of Board.
+     *
+     * @return App\Model\Applicant
+     */
+    public function applicants()
+    {
+        return $this->hasMany(Applicant::class, 'status_id');
     }
 }

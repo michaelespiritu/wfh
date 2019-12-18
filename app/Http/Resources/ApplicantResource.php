@@ -23,7 +23,7 @@ class ApplicantResource extends JsonResource
             'date_applied' => $this->created_at->format('M d, Y'),
             'status' => [
                 'name' => $this->status->name,
-                'id' => $this->status->id
+                'identifier' => $this->status->identifier
             ],
             'user' => UserResource::make($this->user)
         ];

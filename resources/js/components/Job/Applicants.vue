@@ -88,6 +88,7 @@
                             <applicant-status 
                                 :id="`applicantModal-${ $store.state.Applicant.Temp.identifier }`"
                                 :boards="boards"
+                                :board="board"
                                 ></applicant-status>
                         </div>
                     </div>
@@ -111,7 +112,7 @@
 
 <script>
 export default {
-    props: ['applicants', 'type', 'boards'],
+    props: ['applicants', 'boards', 'board'],
     created () {
         this.$store.commit('SET_APPLICANT_TYPE', this.type)
         this.$store.commit('SET_APPLICANT_DATA', this.applicants)

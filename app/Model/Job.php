@@ -77,7 +77,7 @@ class Job extends Model
      * 
      * @return App\Model\JobBoard
      */
-    public function jobBoard()
+    public function jobBoards()
     {
         return $this->hasMany(JobBoard::class);
     }
@@ -131,7 +131,7 @@ class Job extends Model
      */
     public function applicantCountTextOutput($type = null)
     {
-        $count = ($type) ? count($this->applicants->where('status', '=', $type)) : count($this->applicants);
+        $count = ($type) ? count($this->jobBoards()->whereIdentifier($type)->first()->applicants) : count($this->applicants);
         
         return ($count > 1) ? "$count Applicants" : "$count Applicant";
     }

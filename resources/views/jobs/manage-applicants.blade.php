@@ -17,9 +17,7 @@
 </div>
 <div class="container-fluid">
     <manage-applicants 
-            :waiting="{{ json_encode($waiting) }}"
-            :shortlist="{{ json_encode($shortlist) }}"
-            :reject="{{ json_encode($reject) }}">
+            :boards="{{ json_encode($boards) }}">
             </manage-applicants>
 </div>
 

@@ -18,7 +18,7 @@ Route::middleware(['auth', 'checkProfile'])->group(function () {
 
     Route::post('/application/{applicant}/update-status', 'Employer\ApplicantController@updateStatus')->name('applicants.update.status');
 
-    Route::get('/applicants/{job}', 'Employer\ApplicantController@index')->name('applicants.index');
+    Route::get('/applicants/{job}/{board}', 'Employer\ApplicantController@index')->name('applicants.index');
 
     Route::get('/manage-applicants/{job}', 'Employer\ApplicantController@manage')->name('applicants.manage');
 

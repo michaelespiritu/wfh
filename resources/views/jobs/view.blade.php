@@ -23,7 +23,7 @@
         <div class="col-xl-3 col-md-6 mb-4">
             <div class="card border-left-info shadow h-100 py-2">
             <div class="card-body">
-                <a class="text-decoration-none text-gray-900" href="{{ route('applicants.index', $job) }}">
+                <a class="text-decoration-none text-gray-900" href="{{ route('applicants.manage', $job) }}">
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
                             <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
@@ -43,10 +43,10 @@
             </div>
         </div>
 
-        @foreach( $job->jobBoard as $board )
+        @foreach( $job->jobBoards as $board )
         <div class="col-xl-3 col-md-6 mb-4">
             <div class="card border-left-{{ $board->name }} shadow h-100 py-2">
-                <a class="text-decoration-none text-gray-900" href="{{ route('applicants.index', [$job, 'type' => 'Waiting']) }}">
+                <a class="text-decoration-none text-gray-900" href="{{ route('applicants.index', [$job->identifier, $board->identifier]) }}">
                     <div class="card-body">
                         <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
@@ -54,7 +54,7 @@
                                 {{ $board->name }}
                             </div>
                             <div class="h5 mb-0">
-                                {{ $job->applicantCountTextOutput('Waiting') }}
+                                {{ $job->applicantCountTextOutput($board->identifier) }}
                             </div>
                             
                         </div>
@@ -67,73 +67,8 @@
             </div>
         </div>
         @endforeach
-        <!-- <div class="col-xl-3 col-md-6 mb-4">
-            <div class="card border-left-Waiting shadow h-100 py-2">
-                <a class="text-decoration-none text-gray-900" href="{{ route('applicants.index', [$job, 'type' => 'Waiting']) }}">
-                    <div class="card-body">
-                        <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-Waiting text-uppercase mb-1">
-                                Waiting
-                            </div>
-                            <div class="h5 mb-0">
-                                {{ $job->applicantCountTextOutput('Waiting') }}
-                            </div>
-                            
-                        </div>
-                        <div class="col-auto">
-                            <i class="fas fa-hourglass-start fa-2x text-Waiting"></i>
-                        </div>
-                        </div>
-                    </div>
-                </a>
-            </div>
-        </div>
-        <div class="col-xl-3 col-md-6 mb-4">
-            <div class="card border-left-Shortlist shadow h-100 py-2">
-                <a class="text-decoration-none text-gray-900" href="{{ route('applicants.index', [$job, 'type' => 'Shortlist']) }}">
-                    <div class="card-body">
-                        <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-Shortlist text-uppercase mb-1">
-                                Shortlisted
-                            </div>
-                            <div class="h5 mb-0">
-                                {{ $job->applicantCountTextOutput('Shortlist') }}
-                            </div>
-                            
-                        </div>
-                        <div class="col-auto">
-                            <i class="fas fa-check fa-2x text-Shortlist"></i>
-                        </div>
-                        </div>
-                    </div>
-                </a>
-            </div>
-        </div>
-        <div class="col-xl-3 col-md-6 mb-4">
-            <div class="card border-left-Reject shadow h-100 py-2">
-                <a class="text-decoration-none text-gray-900" href="{{ route('applicants.index', [$job, 'type' => 'Reject']) }}">
-                    <div class="card-body">
-                        <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-Reject text-uppercase mb-1">
-                                Rejected
-                            </div>
-                            <div class="h5 mb-0">
-                                {{ $job->applicantCountTextOutput('Reject') }}
-                            </div>
-                            
-                        </div>
-                        <div class="col-auto">
-                            <i class="fas fa-times-circle fa-2x text-Reject"></i>
-                        </div>
-                        </div>
-                    </div>
-                </a>
-            </div>
-        </div>
-    </div> -->
+        
+    </div> 
 
     <div class="card shadow mb-4">
         <div class="card-body">
@@ -174,19 +109,19 @@
 
         </div>
 
-        <div class="card-footer text-muted text-center">
-            <p >Email Address will be notified when someone applied: </p>
-            <ul class="list-inline mb-0">
-            @foreach($job->notify_email as $email)
-                <li class="list-inline-item">
-                    {{ $email }}
-                </li>
-            @endforeach
-            </ul>
-        </div>
-
     </div>
 
+
+    <div class="text-muted text-center">
+        <p >Email Address will be notified when someone applied: </p>
+        <ul class="list-inline mb-0">
+        @foreach($job->notify_email as $email)
+            <li class="list-inline-item">
+                {{ $email }}
+            </li>
+        @endforeach
+        </ul>
+    </div>
 </div>
 
 @endsection

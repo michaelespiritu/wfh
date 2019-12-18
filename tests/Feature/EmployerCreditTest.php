@@ -12,7 +12,6 @@ class EmployerCreditTest extends TestCase
 {
     use RefreshDatabase;
 
-    /** @test */
     public function EmployerCanBuyJobCredits()
     {
         $this->withoutExceptionHandling();
@@ -59,7 +58,6 @@ class EmployerCreditTest extends TestCase
         $this->assertEquals($user->employerCredit->fresh()->credit, 2);
     }
 
-    /** @test */
     public function EmployerCanBuyJobCreditsAndWillActivateTheLastJobRequest()
     {
         $this->withoutExceptionHandling();
@@ -97,7 +95,6 @@ class EmployerCreditTest extends TestCase
         $this->assertEquals($user->employerCredit->fresh()->credit, 2);
     }
 
-    /** @test */
     public function EmployerCreditsWillAddUp()
     {
         $this->withoutExceptionHandling();

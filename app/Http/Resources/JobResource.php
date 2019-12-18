@@ -32,7 +32,7 @@ class JobResource extends JsonResource
             'public_path' => $this->applicantPath(),
             'apply_path' => $this->jobApplyPath(),
             'created_at' => $this->created_at->format('M d, Y'),
-            'boards' => $this->jobBoard
+            'boards' => $this->jobBoards
         ];
     }
 }

@@ -138,6 +138,6 @@ trait JobsTrait
         $data['identifier'] = Str::uuid();
         $data['name'] = $name;
 
-        $job->jobBoard()->create($data);
+        $job->jobBoards()->create($data);
     }
 }

@@ -2467,14 +2467,13 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['id', 'boards'],
+  props: ['id', 'boards', 'board'],
   methods: {
     updateStatus: function updateStatus() {
       var _this = this;
 
-      axios.post("/application/".concat(this.$store.state.Applicant.Temp.identifier, "/update-status"), {
-        status: this.$store.state.Applicant.Temp.status.id,
-        type: this.$store.state.Applicant.Type
+      axios.post("/application/".concat(this.$store.state.Applicant.Temp.identifier, "/update-status?b=").concat(this.board.identifier), {
+        status: this.$store.state.Applicant.Temp.status.identifier
       }).then(function (response) {
         console.log(response.data.applicants);
 
@@ -2631,8 +2630,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['applicants', 'type', 'boards'],
+  props: ['applicants', 'boards', 'board'],
   created: function created() {
     this.$store.commit('SET_APPLICANT_TYPE', this.type);
     this.$store.commit('SET_APPLICANT_DATA', this.applicants);
@@ -2972,9 +2972,9 @@ var customMessages = {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _Waiting__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Waiting */ "./resources/js/components/Job/ManageApplicants/Waiting.vue");
-/* harmony import */ var _Shortlist__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Shortlist */ "./resources/js/components/Job/ManageApplicants/Shortlist.vue");
-/* harmony import */ var _Reject__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Reject */ "./resources/js/components/Job/ManageApplicants/Reject.vue");
+/* harmony import */ var vuedraggable__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vuedraggable */ "./node_modules/vuedraggable/dist/vuedraggable.common.js");
+/* harmony import */ var vuedraggable__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(vuedraggable__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _Misc_SwalAlerts__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../Misc/SwalAlerts */ "./resources/js/components/Misc/SwalAlerts.vue");
 //
 //
 //
@@ -2983,361 +2983,87 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['reject', 'shortlist', 'waiting'],
+  mixins: [_Misc_SwalAlerts__WEBPACK_IMPORTED_MODULE_1__["default"]],
+  props: ['boards'],
   components: {
-    Waiting: _Waiting__WEBPACK_IMPORTED_MODULE_0__["default"],
-    Reject: _Reject__WEBPACK_IMPORTED_MODULE_2__["default"],
-    Shortlist: _Shortlist__WEBPACK_IMPORTED_MODULE_1__["default"]
+    draggable: vuedraggable__WEBPACK_IMPORTED_MODULE_0___default.a
   },
   created: function created() {
-    this.$store.commit('SET_APPLCIANT_WAITING', this.waiting);
-    this.$store.commit('SET_APPLCIANT_REJECT', this.reject);
-    this.$store.commit('SET_APPLCIANT_SHORTLIST', this.shortlist);
-  },
-  computed: {// applicantsData () {
-    //     return this.$store.state.Applicant.Data
-    // }
-  }
-});
-
-/***/ }),
-
-/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/Job/ManageApplicants/Reject.vue?vue&type=script&lang=js&":
-/*!**************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/Job/ManageApplicants/Reject.vue?vue&type=script&lang=js& ***!
-  \**************************************************************************************************************************************************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var vuedraggable__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vuedraggable */ "./node_modules/vuedraggable/dist/vuedraggable.common.js");
-/* harmony import */ var vuedraggable__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(vuedraggable__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _Misc_SwalAlerts__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../Misc/SwalAlerts */ "./resources/js/components/Misc/SwalAlerts.vue");
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-
-
-/* harmony default export */ __webpack_exports__["default"] = ({
-  mixins: [_Misc_SwalAlerts__WEBPACK_IMPORTED_MODULE_1__["default"]],
-  props: ['applicants', 'type'],
-  components: {
-    draggable: vuedraggable__WEBPACK_IMPORTED_MODULE_0___default.a
+    this.$store.commit('SET_JOB_BOARD', this.boards);
   },
   computed: {
-    reject: {
+    boarding: {
       get: function get() {
-        return this.$store.state.Applicant.Reject;
+        return this.$store.state.Applicant.Boards;
       },
       set: function set(value) {
-        this.$store.commit('SET_APPLCIANT_REJECT', value);
-        this.$store.commit('SET_APPLICANT_TEMP', value);
+        console.log(value);
+        this.$store.commit('SET_JOB_BOARD', value);
       }
     }
   },
   methods: {
-    applicantUpdate: function applicantUpdate(evt) {
+    applicantUpdate: function applicantUpdate(evt, board) {
       if (evt.hasOwnProperty('added')) {
-        this.updateOrder(evt.added.element.identifier, "".concat(evt.added.element.user.name, " has been moved to Reject"));
+        this.updateOrder(evt.added.element.identifier, board.identifier, "".concat(evt.added.element.user.name, " has been moved to ").concat(board.name));
       }
     },
-    updateOrder: function updateOrder(target, message) {
+    updateOrder: function updateOrder(target, board, message) {
       var _this = this;
 
       axios.post("/application/".concat(target, "/update-status"), {
-        status: 'Reject',
-        type: 'Reject'
+        status: board
       }).then(function (response) {
-        _this.$store.commit('SET_APPLCIANT_REJECT', response.data.applicants);
-
-        _this.successAlert(message, null, {
-          toast: true,
-          position: 'top-end',
-          showConfirmButton: false,
-          timer: 1500,
-          onClose: function onClose() {
-            _this.loading = false;
-          }
-        });
-      })["catch"](function (err) {
-        _this.errorAlert("Something went wrong. <br> ".concat(err.response.data.hasOwnProperty('message') ? '<span class="text-danger">Tip</span>: ' + err.response.data.message : ''));
-      });
-    }
-  }
-});
-
-/***/ }),
-
-/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/Job/ManageApplicants/Shortlist.vue?vue&type=script&lang=js&":
-/*!*****************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/Job/ManageApplicants/Shortlist.vue?vue&type=script&lang=js& ***!
-  \*****************************************************************************************************************************************************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var vuedraggable__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vuedraggable */ "./node_modules/vuedraggable/dist/vuedraggable.common.js");
-/* harmony import */ var vuedraggable__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(vuedraggable__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _Misc_SwalAlerts__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../Misc/SwalAlerts */ "./resources/js/components/Misc/SwalAlerts.vue");
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-
-
-/* harmony default export */ __webpack_exports__["default"] = ({
-  mixins: [_Misc_SwalAlerts__WEBPACK_IMPORTED_MODULE_1__["default"]],
-  props: ['applicants', 'type'],
-  components: {
-    draggable: vuedraggable__WEBPACK_IMPORTED_MODULE_0___default.a
-  },
-  computed: {
-    shortlist: {
-      get: function get() {
-        return this.$store.state.Applicant.Shortlist;
-      },
-      set: function set(value) {
-        this.$store.commit('SET_APPLCIANT_SHORTLIST', value);
-      }
-    }
-  },
-  methods: {
-    applicantUpdate: function applicantUpdate(evt) {
-      if (evt.hasOwnProperty('added')) {
-        this.updateOrder(evt.added.element.identifier, "".concat(evt.added.element.user.name, " has been moved to Shortlist"));
-      }
-    },
-    updateOrder: function updateOrder(target, message) {
-      var _this = this;
-
-      axios.post("/application/".concat(target, "/update-status"), {
-        status: 'Shortlist',
-        type: 'Shortlist'
-      }).then(function (response) {
-        _this.$store.commit('SET_APPLCIANT_SHORTLIST', response.data.applicants);
-
-        _this.successAlert(message, null, {
-          toast: true,
-          position: 'top-end',
-          showConfirmButton: false,
-          timer: 1500,
-          onClose: function onClose() {
-            _this.loading = false;
-          }
-        });
-      })["catch"](function (err) {
-        _this.errorAlert("Something went wrong. <br> ".concat(err.response.data.hasOwnProperty('message') ? '<span class="text-danger">Tip</span>: ' + err.response.data.message : ''));
-      });
-    }
-  }
-});
-
-/***/ }),
-
-/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/Job/ManageApplicants/Waiting.vue?vue&type=script&lang=js&":
-/*!***************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/Job/ManageApplicants/Waiting.vue?vue&type=script&lang=js& ***!
-  \***************************************************************************************************************************************************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var vuedraggable__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vuedraggable */ "./node_modules/vuedraggable/dist/vuedraggable.common.js");
-/* harmony import */ var vuedraggable__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(vuedraggable__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _Misc_SwalAlerts__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../Misc/SwalAlerts */ "./resources/js/components/Misc/SwalAlerts.vue");
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-
-
-/* harmony default export */ __webpack_exports__["default"] = ({
-  mixins: [_Misc_SwalAlerts__WEBPACK_IMPORTED_MODULE_1__["default"]],
-  props: ['applicants', 'type'],
-  components: {
-    draggable: vuedraggable__WEBPACK_IMPORTED_MODULE_0___default.a
-  },
-  computed: {
-    waiting: {
-      get: function get() {
-        return this.$store.state.Applicant.Waiting;
-      },
-      set: function set(value) {
-        this.$store.commit('SET_APPLCIANT_WAITING', value);
-      }
-    }
-  },
-  methods: {
-    applicantUpdate: function applicantUpdate(evt) {
-      if (evt.hasOwnProperty('added')) {
-        this.updateOrder(evt.added.element.identifier, "".concat(evt.added.element.user.name, " has been moved to Waiting"));
-      }
-    },
-    updateOrder: function updateOrder(target, message) {
-      var _this = this;
-
-      axios.post("/application/".concat(target, "/update-status"), {
-        status: 'Waiting',
-        type: 'Waiting'
-      }).then(function (response) {
-        console.log(response.data);
-
-        _this.$store.commit('SET_APPLCIANT_WAITING', response.data.applicants);
+        _this.$store.commit('SET_JOB_BOARD', response.data.applicants);
 
         _this.successAlert(message, null, {
           toast: true,
@@ -59174,8 +58900,8 @@ var render = function() {
           {
             name: "model",
             rawName: "v-model",
-            value: _vm.$store.state.Applicant.Temp.status.id,
-            expression: "$store.state.Applicant.Temp.status.id"
+            value: _vm.$store.state.Applicant.Temp.status.identifier,
+            expression: "$store.state.Applicant.Temp.status.identifier"
           }
         ],
         staticClass: "custom-select custom-select-sm",
@@ -59192,7 +58918,7 @@ var render = function() {
                 })
               _vm.$set(
                 _vm.$store.state.Applicant.Temp.status,
-                "id",
+                "identifier",
                 $event.target.multiple ? $$selectedVal : $$selectedVal[0]
               )
             },
@@ -59201,9 +58927,11 @@ var render = function() {
         }
       },
       _vm._l(_vm.boards, function(board, index) {
-        return _c("option", { key: index, domProps: { value: board.id } }, [
-          _vm._v(_vm._s(board.name))
-        ])
+        return _c(
+          "option",
+          { key: index, domProps: { value: board.identifier } },
+          [_vm._v(_vm._s(board.name))]
+        )
       }),
       0
     )
@@ -59445,7 +59173,8 @@ var render = function() {
                                 id:
                                   "applicantModal-" +
                                   _vm.$store.state.Applicant.Temp.identifier,
-                                boards: _vm.boards
+                                boards: _vm.boards,
+                                board: _vm.board
                               }
                             })
                           ],
@@ -60225,335 +59954,111 @@ var render = function() {
   return _c(
     "div",
     { staticClass: "row" },
-    [_c("waiting"), _vm._v(" "), _c("shortlist"), _vm._v(" "), _c("reject")],
-    1
-  )
-}
-var staticRenderFns = []
-render._withStripped = true
-
-
-
-/***/ }),
-
-/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/Job/ManageApplicants/Reject.vue?vue&type=template&id=479e746b&":
-/*!******************************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/Job/ManageApplicants/Reject.vue?vue&type=template&id=479e746b& ***!
-  \******************************************************************************************************************************************************************************************************************************/
-/*! exports provided: render, staticRenderFns */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
-var render = function() {
-  var _vm = this
-  var _h = _vm.$createElement
-  var _c = _vm._self._c || _h
-  return _c(
-    "div",
-    { staticClass: "col-4" },
-    [
-      _c("p", { staticClass: "h3 text-center" }, [_vm._v("Rejected")]),
-      _vm._v(" "),
-      _c("hr"),
-      _vm._v(" "),
-      _c(
-        "draggable",
-        {
-          staticClass: "dragArea",
-          attrs: { group: "applicants" },
-          on: { change: _vm.applicantUpdate },
-          model: {
-            value: _vm.reject,
-            callback: function($$v) {
-              _vm.reject = $$v
+    _vm._l(_vm.$store.state.Applicant.Boards, function(board, index) {
+      return _c(
+        "div",
+        { key: index, staticClass: "col-4" },
+        [
+          _c("p", { staticClass: "h3 text-center" }, [
+            _vm._v(_vm._s(board.name))
+          ]),
+          _vm._v(" "),
+          _c("hr"),
+          _vm._v(" "),
+          _c(
+            "draggable",
+            {
+              staticClass: "dragArea",
+              attrs: { list: board.applicants, group: "applicants" },
+              on: {
+                change: function($event) {
+                  return _vm.applicantUpdate($event, board)
+                }
+              }
             },
-            expression: "reject"
-          }
-        },
-        _vm._l(_vm.reject, function(applicant, index) {
-          return _c("div", { key: index, staticClass: "col-sm-12" }, [
-            _c("div", { attrs: { "data-toggle": "modal" } }, [
-              _c("div", { staticClass: "card px-3 py-3 mb-3 cursor-pointer" }, [
-                _c(
-                  "div",
-                  {
-                    staticClass:
-                      "d-lg-flex align-items-center justify-content-between mb-2"
-                  },
-                  [
-                    _c("div", { staticClass: "text-center text-lg-left" }, [
+            _vm._l(board.applicants, function(applicant, index) {
+              return _c("div", { key: index, staticClass: "col-sm-12" }, [
+                _c("div", { attrs: { "data-toggle": "modal" } }, [
+                  _c(
+                    "div",
+                    { staticClass: "card px-3 py-3 mb-3 cursor-pointer" },
+                    [
                       _c(
-                        "p",
+                        "div",
                         {
-                          staticClass: "h4 mb-0",
-                          attrs: { itemprop: "title" }
+                          staticClass:
+                            "d-lg-flex align-items-center justify-content-between mb-2"
                         },
                         [
-                          _vm._v(
-                            "\n                                " +
-                              _vm._s(applicant.user.name) +
-                              "\n                            "
+                          _c(
+                            "div",
+                            { staticClass: "text-center text-lg-left" },
+                            [
+                              _c(
+                                "p",
+                                {
+                                  staticClass: "h4 mb-0",
+                                  attrs: { itemprop: "title" }
+                                },
+                                [
+                                  _vm._v(
+                                    "\n                                    " +
+                                      _vm._s(applicant.user.name) +
+                                      "\n                                "
+                                  )
+                                ]
+                              ),
+                              _vm._v(" "),
+                              _c("p", { staticClass: "mb-0" }, [
+                                _c("small", [
+                                  _vm._v(_vm._s(applicant.user.title))
+                                ])
+                              ])
+                            ]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "div",
+                            { staticClass: "text-center text-lg-right" },
+                            [
+                              _c("p", [
+                                _c(
+                                  "span",
+                                  {
+                                    class:
+                                      "badge badge-" + applicant.status.name
+                                  },
+                                  [_vm._v(_vm._s(applicant.status.name))]
+                                )
+                              ])
+                            ]
                           )
                         ]
                       ),
                       _vm._v(" "),
                       _c("p", { staticClass: "mb-0" }, [
-                        _c("small", [_vm._v(_vm._s(applicant.user.title))])
+                        _c("small", [
+                          _c("span", { attrs: { itemprop: "datePosted" } }, [
+                            _vm._v(
+                              "\n                                    Date Applied: " +
+                                _vm._s(applicant.date_applied) +
+                                "\n                                "
+                            )
+                          ])
+                        ])
                       ])
-                    ]),
-                    _vm._v(" "),
-                    _c("div", { staticClass: "text-center text-lg-right" }, [
-                      _c("p", [
-                        _c(
-                          "span",
-                          { class: "badge badge-" + applicant.status },
-                          [_vm._v(_vm._s(applicant.status))]
-                        )
-                      ])
-                    ])
-                  ]
-                ),
-                _vm._v(" "),
-                _c("p", { staticClass: "mb-0" }, [
-                  _c("small", [
-                    _c("span", { attrs: { itemprop: "datePosted" } }, [
-                      _vm._v(
-                        "\n                                Date Applied: " +
-                          _vm._s(applicant.date_applied) +
-                          "\n                            "
-                      )
-                    ])
-                  ])
+                    ]
+                  )
                 ])
               ])
-            ])
-          ])
-        }),
-        0
+            }),
+            0
+          )
+        ],
+        1
       )
-    ],
-    1
-  )
-}
-var staticRenderFns = []
-render._withStripped = true
-
-
-
-/***/ }),
-
-/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/Job/ManageApplicants/Shortlist.vue?vue&type=template&id=7ba5aa7e&":
-/*!*********************************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/Job/ManageApplicants/Shortlist.vue?vue&type=template&id=7ba5aa7e& ***!
-  \*********************************************************************************************************************************************************************************************************************************/
-/*! exports provided: render, staticRenderFns */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
-var render = function() {
-  var _vm = this
-  var _h = _vm.$createElement
-  var _c = _vm._self._c || _h
-  return _c(
-    "div",
-    { staticClass: "col-4" },
-    [
-      _c("p", { staticClass: "h3 text-center" }, [_vm._v("Shortlisted")]),
-      _vm._v(" "),
-      _c("hr"),
-      _vm._v(" "),
-      _c(
-        "draggable",
-        {
-          staticClass: "dragArea",
-          attrs: { group: "applicants" },
-          on: { change: _vm.applicantUpdate },
-          model: {
-            value: _vm.shortlist,
-            callback: function($$v) {
-              _vm.shortlist = $$v
-            },
-            expression: "shortlist"
-          }
-        },
-        _vm._l(_vm.shortlist, function(applicant, index) {
-          return _c("div", { key: index, staticClass: "col-sm-12" }, [
-            _c("div", { attrs: { "data-toggle": "modal" } }, [
-              _c("div", { staticClass: "card px-3 py-3 mb-3 cursor-pointer" }, [
-                _c(
-                  "div",
-                  {
-                    staticClass:
-                      "d-lg-flex align-items-center justify-content-between mb-2"
-                  },
-                  [
-                    _c("div", { staticClass: "text-center text-lg-left" }, [
-                      _c(
-                        "p",
-                        {
-                          staticClass: "h4 mb-0",
-                          attrs: { itemprop: "title" }
-                        },
-                        [
-                          _vm._v(
-                            "\n                                " +
-                              _vm._s(applicant.user.name) +
-                              "\n                            "
-                          )
-                        ]
-                      ),
-                      _vm._v(" "),
-                      _c("p", { staticClass: "mb-0" }, [
-                        _c("small", [_vm._v(_vm._s(applicant.user.title))])
-                      ])
-                    ]),
-                    _vm._v(" "),
-                    _c("div", { staticClass: "text-center text-lg-right" }, [
-                      _c("p", [
-                        _c(
-                          "span",
-                          { class: "badge badge-" + applicant.status },
-                          [_vm._v(_vm._s(applicant.status))]
-                        )
-                      ])
-                    ])
-                  ]
-                ),
-                _vm._v(" "),
-                _c("p", { staticClass: "mb-0" }, [
-                  _c("small", [
-                    _c("span", { attrs: { itemprop: "datePosted" } }, [
-                      _vm._v(
-                        "\n                                Date Applied: " +
-                          _vm._s(applicant.date_applied) +
-                          "\n                            "
-                      )
-                    ])
-                  ])
-                ])
-              ])
-            ])
-          ])
-        }),
-        0
-      )
-    ],
-    1
-  )
-}
-var staticRenderFns = []
-render._withStripped = true
-
-
-
-/***/ }),
-
-/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/Job/ManageApplicants/Waiting.vue?vue&type=template&id=7b99db31&":
-/*!*******************************************************************************************************************************************************************************************************************************!*\
-  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/Job/ManageApplicants/Waiting.vue?vue&type=template&id=7b99db31& ***!
-  \*******************************************************************************************************************************************************************************************************************************/
-/*! exports provided: render, staticRenderFns */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
-var render = function() {
-  var _vm = this
-  var _h = _vm.$createElement
-  var _c = _vm._self._c || _h
-  return _c(
-    "div",
-    { staticClass: "col-4" },
-    [
-      _c("p", { staticClass: "h3 text-center" }, [_vm._v("Waiting")]),
-      _vm._v(" "),
-      _c("hr"),
-      _vm._v(" "),
-      _c(
-        "draggable",
-        {
-          staticClass: "dragArea",
-          attrs: { group: "applicants" },
-          on: { change: _vm.applicantUpdate },
-          model: {
-            value: _vm.waiting,
-            callback: function($$v) {
-              _vm.waiting = $$v
-            },
-            expression: "waiting"
-          }
-        },
-        _vm._l(_vm.waiting, function(applicant, index) {
-          return _c("div", { key: index, staticClass: "col-sm-12" }, [
-            _c("div", { attrs: { "data-toggle": "modal" } }, [
-              _c("div", { staticClass: "card px-3 py-3 mb-3 cursor-pointer" }, [
-                _c(
-                  "div",
-                  {
-                    staticClass:
-                      "d-lg-flex align-items-center justify-content-between mb-2"
-                  },
-                  [
-                    _c("div", { staticClass: "text-center text-lg-left" }, [
-                      _c(
-                        "p",
-                        {
-                          staticClass: "h4 mb-0",
-                          attrs: { itemprop: "title" }
-                        },
-                        [
-                          _vm._v(
-                            "\n                                " +
-                              _vm._s(applicant.user.name) +
-                              "\n                            "
-                          )
-                        ]
-                      ),
-                      _vm._v(" "),
-                      _c("p", { staticClass: "mb-0" }, [
-                        _c("small", [_vm._v(_vm._s(applicant.user.title))])
-                      ])
-                    ]),
-                    _vm._v(" "),
-                    _c("div", { staticClass: "text-center text-lg-right" }, [
-                      _c("p", [
-                        _c(
-                          "span",
-                          { class: "badge badge-" + applicant.status },
-                          [_vm._v(_vm._s(applicant.status))]
-                        )
-                      ])
-                    ])
-                  ]
-                ),
-                _vm._v(" "),
-                _c("p", { staticClass: "mb-0" }, [
-                  _c("small", [
-                    _c("span", { attrs: { itemprop: "datePosted" } }, [
-                      _vm._v(
-                        "\n                                Date Applied: " +
-                          _vm._s(applicant.date_applied) +
-                          "\n                            "
-                      )
-                    ])
-                  ])
-                ])
-              ])
-            ])
-          ])
-        }),
-        0
-      )
-    ],
-    1
+    }),
+    0
   )
 }
 var staticRenderFns = []
@@ -79777,213 +79282,6 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./resources/js/components/Job/ManageApplicants/Reject.vue":
-/*!*****************************************************************!*\
-  !*** ./resources/js/components/Job/ManageApplicants/Reject.vue ***!
-  \*****************************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _Reject_vue_vue_type_template_id_479e746b___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Reject.vue?vue&type=template&id=479e746b& */ "./resources/js/components/Job/ManageApplicants/Reject.vue?vue&type=template&id=479e746b&");
-/* harmony import */ var _Reject_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Reject.vue?vue&type=script&lang=js& */ "./resources/js/components/Job/ManageApplicants/Reject.vue?vue&type=script&lang=js&");
-/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
-
-
-
-
-
-/* normalize component */
-
-var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
-  _Reject_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
-  _Reject_vue_vue_type_template_id_479e746b___WEBPACK_IMPORTED_MODULE_0__["render"],
-  _Reject_vue_vue_type_template_id_479e746b___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
-  false,
-  null,
-  null,
-  null
-  
-)
-
-/* hot reload */
-if (false) { var api; }
-component.options.__file = "resources/js/components/Job/ManageApplicants/Reject.vue"
-/* harmony default export */ __webpack_exports__["default"] = (component.exports);
-
-/***/ }),
-
-/***/ "./resources/js/components/Job/ManageApplicants/Reject.vue?vue&type=script&lang=js&":
-/*!******************************************************************************************!*\
-  !*** ./resources/js/components/Job/ManageApplicants/Reject.vue?vue&type=script&lang=js& ***!
-  \******************************************************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Reject_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib??ref--4-0!../../../../../node_modules/vue-loader/lib??vue-loader-options!./Reject.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/Job/ManageApplicants/Reject.vue?vue&type=script&lang=js&");
-/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Reject_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
-
-/***/ }),
-
-/***/ "./resources/js/components/Job/ManageApplicants/Reject.vue?vue&type=template&id=479e746b&":
-/*!************************************************************************************************!*\
-  !*** ./resources/js/components/Job/ManageApplicants/Reject.vue?vue&type=template&id=479e746b& ***!
-  \************************************************************************************************/
-/*! exports provided: render, staticRenderFns */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Reject_vue_vue_type_template_id_479e746b___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../../node_modules/vue-loader/lib??vue-loader-options!./Reject.vue?vue&type=template&id=479e746b& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/Job/ManageApplicants/Reject.vue?vue&type=template&id=479e746b&");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Reject_vue_vue_type_template_id_479e746b___WEBPACK_IMPORTED_MODULE_0__["render"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Reject_vue_vue_type_template_id_479e746b___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
-
-
-
-/***/ }),
-
-/***/ "./resources/js/components/Job/ManageApplicants/Shortlist.vue":
-/*!********************************************************************!*\
-  !*** ./resources/js/components/Job/ManageApplicants/Shortlist.vue ***!
-  \********************************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _Shortlist_vue_vue_type_template_id_7ba5aa7e___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Shortlist.vue?vue&type=template&id=7ba5aa7e& */ "./resources/js/components/Job/ManageApplicants/Shortlist.vue?vue&type=template&id=7ba5aa7e&");
-/* harmony import */ var _Shortlist_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Shortlist.vue?vue&type=script&lang=js& */ "./resources/js/components/Job/ManageApplicants/Shortlist.vue?vue&type=script&lang=js&");
-/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
-
-
-
-
-
-/* normalize component */
-
-var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
-  _Shortlist_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
-  _Shortlist_vue_vue_type_template_id_7ba5aa7e___WEBPACK_IMPORTED_MODULE_0__["render"],
-  _Shortlist_vue_vue_type_template_id_7ba5aa7e___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
-  false,
-  null,
-  null,
-  null
-  
-)
-
-/* hot reload */
-if (false) { var api; }
-component.options.__file = "resources/js/components/Job/ManageApplicants/Shortlist.vue"
-/* harmony default export */ __webpack_exports__["default"] = (component.exports);
-
-/***/ }),
-
-/***/ "./resources/js/components/Job/ManageApplicants/Shortlist.vue?vue&type=script&lang=js&":
-/*!*********************************************************************************************!*\
-  !*** ./resources/js/components/Job/ManageApplicants/Shortlist.vue?vue&type=script&lang=js& ***!
-  \*********************************************************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Shortlist_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib??ref--4-0!../../../../../node_modules/vue-loader/lib??vue-loader-options!./Shortlist.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/Job/ManageApplicants/Shortlist.vue?vue&type=script&lang=js&");
-/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Shortlist_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
-
-/***/ }),
-
-/***/ "./resources/js/components/Job/ManageApplicants/Shortlist.vue?vue&type=template&id=7ba5aa7e&":
-/*!***************************************************************************************************!*\
-  !*** ./resources/js/components/Job/ManageApplicants/Shortlist.vue?vue&type=template&id=7ba5aa7e& ***!
-  \***************************************************************************************************/
-/*! exports provided: render, staticRenderFns */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Shortlist_vue_vue_type_template_id_7ba5aa7e___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../../node_modules/vue-loader/lib??vue-loader-options!./Shortlist.vue?vue&type=template&id=7ba5aa7e& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/Job/ManageApplicants/Shortlist.vue?vue&type=template&id=7ba5aa7e&");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Shortlist_vue_vue_type_template_id_7ba5aa7e___WEBPACK_IMPORTED_MODULE_0__["render"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Shortlist_vue_vue_type_template_id_7ba5aa7e___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
-
-
-
-/***/ }),
-
-/***/ "./resources/js/components/Job/ManageApplicants/Waiting.vue":
-/*!******************************************************************!*\
-  !*** ./resources/js/components/Job/ManageApplicants/Waiting.vue ***!
-  \******************************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _Waiting_vue_vue_type_template_id_7b99db31___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Waiting.vue?vue&type=template&id=7b99db31& */ "./resources/js/components/Job/ManageApplicants/Waiting.vue?vue&type=template&id=7b99db31&");
-/* harmony import */ var _Waiting_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Waiting.vue?vue&type=script&lang=js& */ "./resources/js/components/Job/ManageApplicants/Waiting.vue?vue&type=script&lang=js&");
-/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
-
-
-
-
-
-/* normalize component */
-
-var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
-  _Waiting_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
-  _Waiting_vue_vue_type_template_id_7b99db31___WEBPACK_IMPORTED_MODULE_0__["render"],
-  _Waiting_vue_vue_type_template_id_7b99db31___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
-  false,
-  null,
-  null,
-  null
-  
-)
-
-/* hot reload */
-if (false) { var api; }
-component.options.__file = "resources/js/components/Job/ManageApplicants/Waiting.vue"
-/* harmony default export */ __webpack_exports__["default"] = (component.exports);
-
-/***/ }),
-
-/***/ "./resources/js/components/Job/ManageApplicants/Waiting.vue?vue&type=script&lang=js&":
-/*!*******************************************************************************************!*\
-  !*** ./resources/js/components/Job/ManageApplicants/Waiting.vue?vue&type=script&lang=js& ***!
-  \*******************************************************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Waiting_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib??ref--4-0!../../../../../node_modules/vue-loader/lib??vue-loader-options!./Waiting.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/Job/ManageApplicants/Waiting.vue?vue&type=script&lang=js&");
-/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Waiting_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
-
-/***/ }),
-
-/***/ "./resources/js/components/Job/ManageApplicants/Waiting.vue?vue&type=template&id=7b99db31&":
-/*!*************************************************************************************************!*\
-  !*** ./resources/js/components/Job/ManageApplicants/Waiting.vue?vue&type=template&id=7b99db31& ***!
-  \*************************************************************************************************/
-/*! exports provided: render, staticRenderFns */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Waiting_vue_vue_type_template_id_7b99db31___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../../node_modules/vue-loader/lib??vue-loader-options!./Waiting.vue?vue&type=template&id=7b99db31& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/Job/ManageApplicants/Waiting.vue?vue&type=template&id=7b99db31&");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Waiting_vue_vue_type_template_id_7b99db31___WEBPACK_IMPORTED_MODULE_0__["render"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Waiting_vue_vue_type_template_id_7b99db31___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
-
-
-
-/***/ }),
-
 /***/ "./resources/js/components/Job/Remove.vue":
 /*!************************************************!*\
   !*** ./resources/js/components/Job/Remove.vue ***!
@@ -80894,6 +80192,7 @@ __webpack_require__.r(__webpack_exports__);
 var getDefaultState = function getDefaultState() {
   return {
     Data: [],
+    Boards: [],
     Waiting: [],
     Reject: [],
     Shortlist: [],
@@ -80944,6 +80243,9 @@ var mutations = {
   },
   SET_APPLCIANT_SHORTLIST: function SET_APPLCIANT_SHORTLIST(state, data) {
     state.Shortlist = data;
+  },
+  SET_JOB_BOARD: function SET_JOB_BOARD(state, data) {
+    state.Boards = data;
   }
 };
 /* harmony default export */ __webpack_exports__["default"] = ({
