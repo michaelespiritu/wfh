@@ -15,6 +15,8 @@ trait ApplicantsTrait
      */
     public function updateApplicantStatus($applicant, $data)
     {
+        $data['status_id'] = $data['status'];
+        
         return $applicant->update($data);
     }
 }

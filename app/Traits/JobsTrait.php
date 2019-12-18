@@ -45,6 +45,10 @@ trait JobsTrait
 
         $this->lessJobCredit($user);
 
+        $this->createJobBoard($job, 'Waiting');
+        $this->createJobBoard($job, 'Shortlisted');
+        $this->createJobBoard($job, 'Rejected');
+
         return $job;
     }
 
@@ -121,5 +125,19 @@ trait JobsTrait
         }
 
         return;
+    }
+
+    /**
+     * The Logic to Create Job Board
+     *
+     * @param  $job $data
+     * @return object
+     */
+    public function createJobBoard($job, $name)
+    {
+        $data['identifier'] = Str::uuid();
+        $data['name'] = $name;
+
+        $job->jobBoard()->create($data);
     }
 }

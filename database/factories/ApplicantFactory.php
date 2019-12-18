@@ -10,7 +10,7 @@ $factory->define(Applicant::class, function (Faker $faker) {
         'identifier' => $faker->uuid(),
         'job_id' => factory('App\Model\Job')->create(),
         'user_id' => factory('App\User')->create(['role_id' => 2]),
-        'status' => 'Waiting',
+        'status_id' => null,
         'cover_letter' => $faker->text()
     ];
 });

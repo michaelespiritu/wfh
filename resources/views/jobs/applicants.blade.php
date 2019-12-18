@@ -26,6 +26,7 @@
 </div>
 <div class="container-fluid">
     <applicants 
+            :boards="{{ $job->jobBoard }}"
             type="{{ $type }}"
             :applicants="{{ json_encode($applicants) }}">
             </applicants>

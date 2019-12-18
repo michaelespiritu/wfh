@@ -14,7 +14,7 @@ class Applicant extends Model
      * @var array
      */
     protected $fillable = [
-        'identifier', 'user_id', 'status', 'cover_letter'
+        'identifier', 'user_id', 'status_id', 'cover_letter'
     ];
 
     /**
@@ -45,6 +45,16 @@ class Applicant extends Model
     public function job()
     {
         return $this->belongsTo(Job::class, 'job_id');
+    }
+
+    /**
+     * The Status of Applicant
+     * 
+     * @return App\Model\Job
+     */
+    public function status()
+    {
+        return $this->belongsTo(JobBoard::class, 'status_id');
     }
 
     /**

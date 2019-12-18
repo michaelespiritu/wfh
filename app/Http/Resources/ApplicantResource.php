@@ -21,7 +21,10 @@ class ApplicantResource extends JsonResource
             'cover_letter' => $this->cover_letter,
             'cover_excerpt' => strip_tags(Str::limit($this->cover_letter,350)),
             'date_applied' => $this->created_at->format('M d, Y'),
-            'status' => $this->status,
+            'status' => [
+                'name' => $this->status->name,
+                'id' => $this->status->id
+            ],
             'user' => UserResource::make($this->user)
         ];
     }

@@ -2,22 +2,24 @@
     <div>
         <select 
             @change="updateStatus"
-            v-model="$store.state.Applicant.Temp.status" 
+            v-model="$store.state.Applicant.Temp.status.id" 
             class="custom-select custom-select-sm">
-            <option value="Waiting">Waiting</option>
-            <option value="Shortlist">Shortlist</option>
-            <option value="Reject">Reject</option>
+            <option 
+                v-for="(board, index) in boards"
+                :key="index"
+                :value="board.id">{{ board.name}}</option>
         </select>
+        
     </div>
 </template>
 
 <script>
 export default {
-    props: ['id'],
+    props: ['id', 'boards'],
     methods: {
         updateStatus () {
             axios.post(`/application/${this.$store.state.Applicant.Temp.identifier}/update-status`, {
-                status: this.$store.state.Applicant.Temp.status,
+                status: this.$store.state.Applicant.Temp.status.id,
                 type: this.$store.state.Applicant.Type
             }).then(response => {
                 console.log(response.data.applicants)

@@ -31,7 +31,8 @@ class JobResource extends JsonResource
             'path' => $this->path(),
             'public_path' => $this->applicantPath(),
             'apply_path' => $this->jobApplyPath(),
-            'created_at' => $this->created_at->format('M d, Y')
+            'created_at' => $this->created_at->format('M d, Y'),
+            'boards' => $this->jobBoard
         ];
     }
 }

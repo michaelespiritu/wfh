@@ -64,34 +64,34 @@ a {
 }
 
 .description-data {
-  height: 20vw;
+  height: auto;
   overflow: hidden;
   transition: .2s all ease-in-out;
 }
 
-.badge-Reject {
+.badge-Rejected {
   color: #fff;
   background-color: #e74a3b;
 }
 
-.border-left-Reject {
+.border-left-Rejected {
   border-left: 0.25rem solid #e74a3b !important;
 }
 
-.text-Reject {
+.text-Rejected {
   color: #e74a3b !important;
 }
 
-.badge-Shortlist {
+.badge-Shortlisted {
   color: #fff;
   background-color: #1cc88a;
 }
 
-.text-Shortlist {
+.text-Shortlisted {
   color: #1cc88a !important;
 }
 
-.border-left-Shortlist {
+.border-left-Shortlisted {
   border-left: 0.25rem solid #1cc88a !important;
 }
 

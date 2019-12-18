@@ -2464,14 +2464,16 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['id'],
+  props: ['id', 'boards'],
   methods: {
     updateStatus: function updateStatus() {
       var _this = this;
 
       axios.post("/application/".concat(this.$store.state.Applicant.Temp.identifier, "/update-status"), {
-        status: this.$store.state.Applicant.Temp.status,
+        status: this.$store.state.Applicant.Temp.status.id,
         type: this.$store.state.Applicant.Type
       }).then(function (response) {
         console.log(response.data.applicants);
@@ -2628,8 +2630,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ['applicants', 'type'],
+  props: ['applicants', 'type', 'boards'],
   created: function created() {
     this.$store.commit('SET_APPLICANT_TYPE', this.type);
     this.$store.commit('SET_APPLICANT_DATA', this.applicants);
@@ -59171,8 +59174,8 @@ var render = function() {
           {
             name: "model",
             rawName: "v-model",
-            value: _vm.$store.state.Applicant.Temp.status,
-            expression: "$store.state.Applicant.Temp.status"
+            value: _vm.$store.state.Applicant.Temp.status.id,
+            expression: "$store.state.Applicant.Temp.status.id"
           }
         ],
         staticClass: "custom-select custom-select-sm",
@@ -59188,8 +59191,8 @@ var render = function() {
                   return val
                 })
               _vm.$set(
-                _vm.$store.state.Applicant.Temp,
-                "status",
+                _vm.$store.state.Applicant.Temp.status,
+                "id",
                 $event.target.multiple ? $$selectedVal : $$selectedVal[0]
               )
             },
@@ -59197,13 +59200,12 @@ var render = function() {
           ]
         }
       },
-      [
-        _c("option", { attrs: { value: "Waiting" } }, [_vm._v("Waiting")]),
-        _vm._v(" "),
-        _c("option", { attrs: { value: "Shortlist" } }, [_vm._v("Shortlist")]),
-        _vm._v(" "),
-        _c("option", { attrs: { value: "Reject" } }, [_vm._v("Reject")])
-      ]
+      _vm._l(_vm.boards, function(board, index) {
+        return _c("option", { key: index, domProps: { value: board.id } }, [
+          _vm._v(_vm._s(board.name))
+        ])
+      }),
+      0
     )
   ])
 }
@@ -59303,9 +59305,10 @@ var render = function() {
                                   _c(
                                     "span",
                                     {
-                                      class: "badge badge-" + applicant.status
+                                      class:
+                                        "badge badge-" + applicant.status.name
                                     },
-                                    [_vm._v(_vm._s(applicant.status))]
+                                    [_vm._v(_vm._s(applicant.status.name))]
                                   )
                                 ])
                               ]
@@ -59441,7 +59444,8 @@ var render = function() {
                               attrs: {
                                 id:
                                   "applicantModal-" +
-                                  _vm.$store.state.Applicant.Temp.identifier
+                                  _vm.$store.state.Applicant.Temp.identifier,
+                                boards: _vm.boards
                               }
                             })
                           ],

@@ -25,7 +25,9 @@ class ApplicationTest extends TestCase
         $create->assertStatus(200)
         ->assertJsonFragment(['success' => 'Application has been sent.']);
 
-        $this->assertDatabaseHas('applicants', $attr);
+        $this->assertDatabaseHas('applicants', [
+            'cover_letter' => 'This is cover Letter'
+        ]);
     }
 
     /** @test */
@@ -44,7 +46,7 @@ class ApplicationTest extends TestCase
         ->assertJsonFragment(['success' => 'Application has been sent.']);
 
         $this->assertDatabaseHas('applicants', [
-            'status' => 'Waiting'
+            'status_id' => null
         ]);
     }
 

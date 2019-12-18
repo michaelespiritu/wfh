@@ -5,6 +5,7 @@ namespace App\Model;
 use App\User;
 use Carbon\Carbon;
 use App\Model\Category;
+use App\Model\JobBoard;
 use App\Model\Applicant;
 use Illuminate\Database\Eloquent\Model;
 
@@ -69,6 +70,16 @@ class Job extends Model
     public function owner()
     {
         return $this->belongsTo(User::class, 'owner_id');
+    }
+
+    /**
+     * The Owner of Job Post
+     * 
+     * @return App\Model\JobBoard
+     */
+    public function jobBoard()
+    {
+        return $this->hasMany(JobBoard::class);
     }
 
     /**

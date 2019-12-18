@@ -33,7 +33,7 @@
                         <div class="text-center text-lg-right">
                             
                             <p>
-                                <span :class="`badge badge-${applicant.status}`">{{ applicant.status }}</span>
+                                <span :class="`badge badge-${applicant.status.name}`">{{ applicant.status.name }}</span>
                             </p>
                         </div>
                     </div>
@@ -87,6 +87,7 @@
 
                             <applicant-status 
                                 :id="`applicantModal-${ $store.state.Applicant.Temp.identifier }`"
+                                :boards="boards"
                                 ></applicant-status>
                         </div>
                     </div>
@@ -110,7 +111,7 @@
 
 <script>
 export default {
-    props: ['applicants', 'type'],
+    props: ['applicants', 'type', 'boards'],
     created () {
         this.$store.commit('SET_APPLICANT_TYPE', this.type)
         this.$store.commit('SET_APPLICANT_DATA', this.applicants)

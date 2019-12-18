@@ -87,6 +87,21 @@ class JobsTest extends TestCase
             'description' => 'Fuga totam reiciendis qui architecto fugiat nemo.'
         ]);
 
+        $this->assertDatabaseHas('job_boards', [
+            'job_id' => 1,
+            'name' => 'Waiting',
+        ]);
+
+        $this->assertDatabaseHas('job_boards', [
+            'job_id' => 1,
+            'name' => 'Shortlisted',
+        ]);
+
+        $this->assertDatabaseHas('job_boards', [
+            'job_id' => 1,
+            'name' => 'Rejected',
+        ]);
+
         $this->assertDatabaseHas('employer_credits', ['credit' => 0]);
     }
 
@@ -145,24 +160,29 @@ class JobsTest extends TestCase
     /** @test */
     public function employerCanUpdateStatusOfApplicant()
     {
+        $this->withoutExceptionHandling();
+
         $employer = $this->signInEmployer();
 
         $employee = factory('App\User')->create(['role_id' => 2]);
         factory('App\Model\Profile')->create(['user_id' => $employee->id]);
 
         $job = factory('App\Model\Job')->create(['owner_id' => $employer->id]);
+        $waiting = factory('App\Model\JobBoard')->create(['job_id' => $job->id, 'name' => 'Waiting']);
+        factory('App\Model\JobBoard')->create(['job_id' => $job->id, 'name' => 'Rejected']);
+
         $applicant = factory('App\Model\Applicant')->create(['job_id' => $job->id, 'user_id' => $employee->id]);
 
         $update = $this->post("/application/$applicant->identifier/update-status", [
-            'status' => 'Rejected'
+            'status' => $waiting->id
         ]);
-        
+
         $update->assertStatus(200)
             ->assertJsonFragment([ 'success' => 'Applicant Status has been Updated.']);
 
         $this->assertDatabaseHas('applicants', [
             'identifier' => $applicant->identifier,
-            'status' => 'Rejected'
+            'status_id' => $waiting->id
         ]);
     }
 

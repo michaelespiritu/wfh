@@ -42,7 +42,32 @@
             </div>
             </div>
         </div>
+
+        @foreach( $job->jobBoard as $board )
         <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-{{ $board->name }} shadow h-100 py-2">
+                <a class="text-decoration-none text-gray-900" href="{{ route('applicants.index', [$job, 'type' => 'Waiting']) }}">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-{{ $board->name }} text-uppercase mb-1">
+                                {{ $board->name }}
+                            </div>
+                            <div class="h5 mb-0">
+                                {{ $job->applicantCountTextOutput('Waiting') }}
+                            </div>
+                            
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-hourglass-start fa-2x text-{{ $board->name }}"></i>
+                        </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+        @endforeach
+        <!-- <div class="col-xl-3 col-md-6 mb-4">
             <div class="card border-left-Waiting shadow h-100 py-2">
                 <a class="text-decoration-none text-gray-900" href="{{ route('applicants.index', [$job, 'type' => 'Waiting']) }}">
                     <div class="card-body">
@@ -108,7 +133,7 @@
                 </a>
             </div>
         </div>
-    </div>
+    </div> -->
 
     <div class="card shadow mb-4">
         <div class="card-body">
@@ -170,7 +195,7 @@
 <script>
     function showMore ()
     {
-        document.getElementById('jobDescription').classList.toggle('h-100')
+        document.getElementById('jobDescription').classList.toggle('h-50')
 
         if ( document.getElementById('showDesc').innerHTML == 'Show More')
         {
