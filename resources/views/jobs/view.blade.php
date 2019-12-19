@@ -5,7 +5,11 @@
 <div class="container-fluid">
   <!-- Page Heading --> 
   <div class="d-flex justify-content-between align-items-center mb-4">
-    <a href="/jobs" class="w-full d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i class="fas fa-chevron-left fa-sm text-white-50"></i> Back</a>
+    <div>
+        <a href="/jobs" class="w-full d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i class="fas fa-chevron-left fa-sm text-white-50"></i> Back</a>
+        <board-create :job="{{ json_encode($job) }}"></board-create>
+
+    </div>
 
     <div>
         <ul class="list-inline mb-0">
@@ -20,7 +24,7 @@
 <div class="container-fluid">
 
     <div class="row">
-        <div class="col-xl-3 col-md-6 mb-4">
+        <div class="col-6 col-xl-3 col-md-3 mb-4">
             <div class="card border-left-info shadow h-100 py-2">
             <div class="card-body">
                 <a class="text-decoration-none text-gray-900" href="{{ route('applicants.manage', $job) }}">
@@ -34,9 +38,6 @@
                             </div>
                             
                         </div>
-                        <div class="col-auto">
-                                <i class="fas fa-users fa-2x text-info"></i>
-                        </div>
                     </div>
                 </a>
             </div>
@@ -44,7 +45,7 @@
         </div>
 
         @foreach( $job->jobBoards as $board )
-        <div class="col-xl-3 col-md-6 mb-4">
+        <div class="col-6 col-xl-3 col-md-3 mb-4">
             <div class="card border-left-{{ $board->name }} shadow h-100 py-2">
                 <a class="text-decoration-none text-gray-900" href="{{ route('applicants.index', [$job->identifier, $board->identifier]) }}">
                     <div class="card-body">
@@ -57,9 +58,6 @@
                                 {{ $job->applicantCountTextOutput($board->identifier) }}
                             </div>
                             
-                        </div>
-                        <div class="col-auto">
-                            <i class="fas fa-hourglass-start fa-2x text-{{ $board->name }}"></i>
                         </div>
                         </div>
                     </div>

@@ -15,6 +15,8 @@ Vue.component('create-job', require('./components/Job/Create.vue').default);
 Vue.component('edit-job', require('./components/Job/edit.vue').default);
 Vue.component('remove-job', require('./components/Job/Remove.vue').default);
 
+Vue.component('board-create', require('./components/Job/Board/Create.vue').default);
+
 Vue.component('create-profile', require('./components/Profile/Create.vue').default);
 Vue.component('applicant-meta', require('./components/Profile/Meta/Applicant/Container.vue').default);
 Vue.component('employer-meta', require('./components/Profile/Meta/Employer/Container.vue').default);

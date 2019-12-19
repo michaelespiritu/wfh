@@ -32,7 +32,7 @@
                         </div>
                         <div class="text-center text-lg-right">
                             
-                            <p>
+                            <p class="status">
                                 <span :class="`badge badge-${applicant.status.name}`">{{ applicant.status.name }}</span>
                             </p>
                         </div>

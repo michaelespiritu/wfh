@@ -1,8 +1,11 @@
 <template>
-    <div class="row">
-        <div class="col-4" v-for="(board, index) in $store.state.Applicant.Boards" :key="index">
+    <div class="d-flex overflow-auto" >
+        <div 
+            style="width: 250px"
+            v-for="(board, index) in $store.state.Applicant.Boards" 
+            :key="index">
             <p class="h3 text-center">{{ board.name }}</p>
-            <hr>
+
             <draggable
                 :list="board.applicants"
                 class="dragArea"
@@ -17,30 +20,23 @@
                     <div 
                         data-toggle="modal" >
                         <div 
-                            class="card px-3 py-3 mb-3 cursor-pointer"
+                            class="card px-3 py-3 mb-3 cursor-pointer text-center"
                             >
-                            <div class="d-lg-flex align-items-center justify-content-between mb-2">
-                                <div class="text-center text-lg-left">
-                                    <p itemprop="title" class="h4 mb-0">
-                                        {{ applicant.user.name }}
-                                    </p>
-                                    <p class="mb-0"><small>{{ applicant.user.title }}</small></p>
-                                </div>
-                                <div class="text-center text-lg-right">
-                                    
-                                    <p>
-                                        <span :class="`badge badge-${applicant.status.name}`">{{ applicant.status.name }}</span>
-                                    </p>
-                                </div>
-                            </div>
-
-                            <p class="mb-0">
-                                <small>
-                                    <span itemprop="datePosted">
-                                        Date Applied: {{ applicant.date_applied }}
-                                    </span>
-                                </small>
-                            </p>
+                                <p itemprop="title" class="h6 mb-0">
+                                    {{ applicant.user.name }}
+                                </p>
+                                <p class="mb-0"><small>{{ applicant.user.title }}</small></p>
+                                
+                                <p class="mb-0 status">
+                                    <span :class="`badge badge-${applicant.status.name}`">{{ applicant.status.name }}</span>
+                                </p>
+                                <p class="mb-0">
+                                    <small>
+                                        <span itemprop="datePosted">
+                                            Date Applied: {{ applicant.date_applied }}
+                                        </span>
+                                    </small>
+                                </p>
 
                         </div>
                     </div>

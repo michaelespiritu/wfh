@@ -16,6 +16,8 @@ Route::middleware(['auth'])->prefix('dashboard')->group(function () {
 Route::middleware(['auth', 'checkProfile'])->group(function () {
     Route::resource('/jobs', 'Employer\JobsController');
 
+    Route::post('/jobs/{job}/create/job-board', 'Employer\JobBoardController@store')->name('job.board.store');
+
     Route::post('/application/{applicant}/update-status', 'Employer\ApplicantController@updateStatus')->name('applicants.update.status');
 
     Route::get('/applicants/{job}/{board}', 'Employer\ApplicantController@index')->name('applicants.index');
